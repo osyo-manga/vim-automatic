@@ -78,7 +78,7 @@ Example: >
 
 キー名		型		説明~
 filetype	(文字列)	|'filetype'| の値と比較
-buftype"	(文字列)	|'buftype'| の値と比較
+buftype		(文字列)	|'buftype'| の値と比較
 bufname		(文字列)	|bufname()| の値と比較
 autocmds	(リスト)	呼び出されたい |autocmd| のリスト
 matchlist	(リスト)	使用する |automatic-matcher| のリスト
