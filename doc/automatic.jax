@@ -110,6 +110,21 @@ unsetting		(0 or 1)	マッチしたいずれかの "set" でこの
 詳しくは |automatic-setter| も参照してください。
 
 
+------------------------------------------------------------------------------
+コンテキスト					*automatic-config-context*
+
+処理が呼び出された時の情報を持つ辞書です。
+|automatic-macher| や |automatic-setter| から参照されます。
+
+
+キー名		型		値~
+filetype	(文字列)	'filetype'
+buftype		(文字列)	'buftype'
+bufname		(文字列)	|bufname()|
+autocmd		(文字列)	呼び出された |autocmd| の値
+filename	(文字列)	ファイルのフルパス
+
+
 =============================================================================
 マッチ方法					*automatic-matcher*
 
@@ -155,6 +170,8 @@ Example: >
 
 - "apply"
   {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
+  {config} は現在の "match" の値が渡されます。
+  {context} の値は |automatic-config-context| を参照してください。
   任意の判定を行いたい場合に使用します。
   キー名	型		デフォルト値~
   apply		(関数参照)	1 を返す関数
@@ -209,7 +226,9 @@ Example: >
   "left"   : 一番左の位置
 
 - "apply"
-  {config} を受け取る辞書関数 "apply" を呼び出します。
+  {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
+  {config} は現在の "set" の値が渡されます。
+  {context} の値は |automatic-config-context| を参照してください。
   任意の処理を行いたい場合に使用します。
   キー名	型		説明~
   apply		(関数参照)	{config} を受け取る辞書関数
@@ -250,6 +269,7 @@ Example: >
   commands	(リスト)	呼び出して欲しいコマンドを設定し
   				ます。リストの先頭から順番にコマ
 				ンドを呼び出します。
+
 
 
 =============================================================================

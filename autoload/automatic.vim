@@ -50,7 +50,8 @@ function! automatic#make_current_context(...)
 \		"filetype" : &filetype,
 \		"bufname"  : bufname,
 \		"buftype"  : &buftype,
-\		"filename" : substitute(fnamemodify(bufname, ":p"), '\\', '/', "g")
+\		"filename" : substitute(fnamemodify(bufname, ":p"), '\\', '/', "g"),
+\		"autocmd"  : "",
 \	}, base)
 endfunction
 
@@ -135,7 +136,7 @@ endfunction
 call automatic#load_setter()
 
 
-function! s:setter_resize(config)
+function! s:setter_resize(config, ...)
 	if has_key(a:config, "height")
 		execute "resize" a:config.height
 	endif
@@ -147,7 +148,7 @@ endfunction
 call automatic#regist_setter("resize", function("s:setter_resize"))
 
 
-function! s:setter_move(config)
+function! s:setter_move(config, ...)
 	if !has_key(a:config, "move")
 		return
 	endif
@@ -166,7 +167,7 @@ endfunction
 call automatic#regist_setter("move", function("s:setter_move"))
 
 
-function! s:setter_apply(config)
+function! s:setter_apply(config, ...)
 	if has_key(a:config, "apply")
 		return a:config.apply(a:config)
 	endif
@@ -175,7 +176,7 @@ endfunction
 call automatic#regist_setter("apply", function("s:setter_apply"))
 
 
-function! s:setter_command(config)
+function! s:setter_command(config, ...)
 	let commands = get(a:config, "commands", [])
 	for command in commands
 		execute command
@@ -187,10 +188,10 @@ call automatic#regist_setter("command", function("s:setter_command"))
 
 
 
-function! automatic#set_current(config)
+function! automatic#set_current(config, context)
 	let setlist = get(a:config, "setlist", keys(s:setter))
 	for name in setlist
-		call s:setter[name](a:config)
+		call s:setter[name](a:config, a:context)
 	endfor
 endfunction
 
@@ -205,7 +206,7 @@ function! automatic#run(...)
 			return -1
 		endif
 	endfor
-	call map(setlist, "automatic#set_current(v:val.set)")
+	call map(setlist, "automatic#set_current(v:val.set, context)")
 " 	call map(filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)"), "automatic#set_current(v:val.set)")
 endfunction
 
