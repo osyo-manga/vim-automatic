@@ -68,8 +68,8 @@ function! s:matcher_autocmd(config, context)
 	if !has_key(a:context, "autocmd")
 		return 1
 	endif
-	let autocmd = get(a:config, "autocmds", ["BufWinEnter"])
-	return index(autocmd, a:context.autocmd) != -1
+	let autocmds = get(a:config, "autocmds", ["BufWinEnter"])
+	return index(autocmds, a:context.autocmd) != -1
 endfunction
 call automatic#regist_matcher("autocmd", function("s:matcher_autocmd"))
 
@@ -200,15 +200,19 @@ endfunction
 
 function! automatic#run(...)
 	let context = automatic#make_current_context(get(a:, 1, {}))
-	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)")
+	let def_match = g:automatic_default_match_config
+
+	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(extend(deepcopy(def_match), get(v:val, 'match', {})), context)")
 	for config in setlist
-		if get(config.set, "unsetting", 0)
+		if get(get(config, "set", {}), "unsetting", 0)
 			return -1
 		endif
 	endfor
-	call map(setlist, "automatic#set_current(v:val.set, context)")
-" 	call map(filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)"), "automatic#set_current(v:val.set)")
+
+	let def_set = g:automatic_default_set_config
+	call map(setlist, "automatic#set_current(extend(deepcopy(def_set), get(v:val, 'set', {})), context)")
 endfunction
+
 
 
 let &cpo = s:save_cpo

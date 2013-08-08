@@ -9,6 +9,8 @@ set cpo&vim
 
 
 let g:automatic_config = get(g:, "automatic_config", [])
+let g:automatic_default_match_config = get(g:, "automatic_default_match_config", {})
+let g:automatic_default_set_config = get(g:, "automatic_default_set_config", {})
 
 augroup automatic
 	autocmd!
