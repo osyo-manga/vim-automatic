@@ -145,18 +145,6 @@ endfunction
 call automatic#load_setter()
 
 
-function! s:setter_resize(config, ...)
-	if has_key(a:config, "height")
-		execute "resize" a:config.height
-	endif
-
-	if has_key(a:config, "width")
-		execute "vertical resize" a:config.width
-	endif
-endfunction
-call automatic#regist_setter("resize", function("s:setter_resize"))
-
-
 function! s:setter_move(config, ...)
 	if !has_key(a:config, "move")
 		return

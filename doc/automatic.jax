@@ -53,6 +53,7 @@ g:automatic_default_set_config			*g:automatic_default_set_config*
 
 |g:automatic_config| に "match" と "set" をキーを持つ辞書のリストを設定して使用
 します。
+"match" にはマッチする条件を、"set" にはセットする値を設定します。
 また、これはリストの先頭から順に適用されていきます。
 
 Example: >
@@ -88,7 +89,7 @@ Example: >
 す。
 い。
 
-キー名		型		説明~
+名前		型		説明~
 filetype	(文字列)	|'filetype'| の値と比較
 buftype		(文字列)	|'buftype'| の値と比較
 bufname		(文字列)	|bufname()| の値と比較
@@ -105,9 +106,11 @@ matchlist	(リスト)	使用する |automatic-matcher| のリスト
 "set" には条件に一致した場合の設定方法を記述します。
 "set" には以下の値を設定することができます。
 
-キー名			型		説明~
-height			(数値)		ウィンドウの高さ（行数）
-width 			(数値)		ウィンドの幅（桁数）
+名前			型		説明~
+height			(任意)		ウィンドウの高さ（行数）
+					または画面上の行数のパーセンテージ
+width 			(任意)		ウィンドの幅（桁数）
+					または画面上の桁数のパーセンテージ
 move			(文字列)	ウィンドウの位置
 setlist			(リスト)	使用する |automatic-setter| のリスト
 is_close_focus_out	(数値)		別のウィンドウへ移動した場合にウィンド
@@ -133,7 +136,7 @@ unsetting		(数値)		マッチしたいずれかの "set" でこの
 |automatic-macher| や |automatic-setter| から参照されます。
 
 
-キー名		型		値~
+名前		型		値~
 filetype	(文字列)	'filetype'
 buftype		(文字列)	'buftype'
 bufname		(文字列)	|bufname()|
@@ -149,23 +152,23 @@ filename	(文字列)	ファイルのフルパス
 
 - "filetype"
   |'filetype'| の値と比較します。
-  キー名	型		デフォルト値~
+  名前		型		デフォルト値~
   filetype	(文字列)	""
 
 - "buftype"
   |'buftype'| の値と比較します。
-  キー名	型		デフォルト値~
+  名前		型		デフォルト値~
   buftype	(文字列)	""
 
 - "bufname"
   |bufname()| の値と比較します。
-  キー名	型		デフォルト値~
+  名前		型		デフォルト値~
   buftype	(文字列)	""
 
 - "autocmd"
   どの |atuocmd| から呼び出されたのかを設定します。
   デフォルトでは |BufWinEnter| 時にマッチします。
-  キー名	型~		デフォルト値~
+  名前		型		デフォルト値~
   autocmds	(リスト)	["BufWinEnter"]
 
   この変数には以下の値が設定出来ます。
@@ -189,7 +192,7 @@ Example: >
   {config} は現在の "match" の値が渡されます。
   {context} の値は |automatic-config-context| を参照してください。
   任意の判定を行いたい場合に使用します。
-  キー名	型		デフォルト値~
+  名前		型		デフォルト値~
   apply		(関数参照)	1 を返す関数
 Example: >
 	let s:match = {
@@ -203,13 +206,13 @@ Example: >
   タブページ内にウィンドウが1つしか開かれていないかどうかを判定します。
   1 が設定されていれば他のウィンドウが開いている場合にマッチします。
   
-  キー名		型	デフォルト値~
+  名前			型	デフォルト値~
   is_open_other_window	(数値)	1
 
 - "matchlist"
   どのマッチ方法を使用するのかを設定します。
   また、このリストに設定された順番でマッチが呼び出されます。
-  キー名	型		デフォルト値~
+  名前		型		デフォルト値~
   matchlist	(文字列)	すべての matcher
 Example: >
 	" "filetype" と "buftype" のみ使用される
@@ -233,13 +236,28 @@ Example: >
 
 - "resize"
   ウィンドウのサイズを設定します。
-  キー名	型	説明~
-  height	(数値)	ウィンドウの高さ（行数）
-  width		(数値)	ウィンドウの幅（桁数）
+  名前		型	説明~
+  height	(任意)	ウィンドウの高さ（行数）
+			または画面上の行数のパーセンテージ(文字列)
+  width		(任意)	ウィンドウの幅（桁数）
+			または画面上の桁数のパーセンテージ(文字列)
+Example: >
+	let s:set = {
+	\	"set" : {
+	\		"height" : 20,
+	\	},
+	\}
+	let s:set2 = {
+	\	"set" : {
+	\		"height" : "25%",
+	\	},
+	\}
+<
+
 
 - "move"
   ウィンドウの位置を設定します。
-  キー名	型		説明~
+  名前		型		説明~
   move		(文字列)	ウィンドウの位置
   move には 以下の文字列が設定出来ます。
   "top"    : 一番上の位置
@@ -252,7 +270,7 @@ Example: >
   {config} は現在の "set" の値が渡されます。
   {context} の値は |automatic-config-context| を参照してください。
   任意の処理を行いたい場合に使用します。
-  キー名	型		説明~
+  名前		型		説明~
   apply		(関数参照)	{config} を受け取る辞書関数
 Example: >
 	let s:set = {
@@ -265,28 +283,29 @@ Example: >
 - "setlist"
   どのセット方法を使用するのかを設定します。
   また、このリストに設定された順番に設定が適用されます。
-  キー名	型		説明~
+  名前		型		説明~
   setlist	(リスト)	setter の名前のリスト
 Example: >
 	" ウィンドウと移動させた後にウィンドウのサイズを設定する
-	let set = {
+	let s:set = {
 	\	"set" : {
 	\		"height" : 20,
 	\		"move" : "top",
 	\		"setlist" : ["move", "resize"]
 	\	},
 	\}
+<
 
-<- "close_window"
+- "close_window"
   ウィンドウを閉じる処理を行います。
-  キー名		型	説明~
+  名前			型	説明~
   is_close_focus_out	(数値)	1 が設定されていればそのウィンドウ
   				から別のウィンドウへと移動した際に
 				元のウィンドウを閉じます。
 
 - "command"
   コマンドの呼び出しを行います。
-  キー名	型		説明~
+  名前		型		説明~
   commands	(リスト)	呼び出して欲しいコマンドを設定し
   				ます。リストの先頭から順番にコマ
 				ンドを呼び出します。
