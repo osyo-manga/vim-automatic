@@ -16,6 +16,8 @@ augroup automatic
 	autocmd WinEnter    * call automatic#run({"autocmd" : "WinEnter"})
 	autocmd WinLeave    * call automatic#run({"autocmd" : "WinLeave"})
 	autocmd FileType    * call automatic#run({"autocmd" : "FileType"})
+	autocmd CmdwinEnter * call automatic#run({"autocmd" : "CmdwinEnter"})
+	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
 augroup END
 
 
