@@ -199,8 +199,14 @@ endfunction
 
 function! automatic#run(...)
 	let context = automatic#make_current_context(get(a:, 1, {}))
-" 	PP context
-	call map(filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)"), "automatic#set_current(v:val.set)")
+	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)")
+	for config in setlist
+		if get(config.set, "unsetting", 0)
+			return -1
+		endif
+	endfor
+	call map(setlist, "automatic#set_current(v:val.set)")
+" 	call map(filter(deepcopy(g:automatic_config), "automatic#is_match(v:val.match, context)"), "automatic#set_current(v:val.set)")
 endfunction
 
 
