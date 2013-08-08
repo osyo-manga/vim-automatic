@@ -1,0 +1,254 @@
+*automatic.txt*		自動的にウィンドウの設定を行う
+
+==============================================================================
+目次						*automatic-contents*
+
+概要				|automatic-introduction|
+使い方				|automatic-usage|
+設定				|automatic-setting|
+  変数				  |automatic-variables|
+  "match"			  |automatic-config-match|
+  セット			  |automatic-config-set|
+
+
+
+==============================================================================
+概要						*automatic-introduction*
+
+|automatic| は任意のタイミングでウィンドウに対する設定を行うプラグインです。
+
+
+
+==============================================================================
+使い方						*automatic-usage*
+
+|g:automatic_config| に設定を記述して使用します。
+設定方法は |automatic-config| を参照してください。
+
+
+==============================================================================
+設定						*automatic-setting*
+
+------------------------------------------------------------------------------
+変数						*automatic-variables*
+
+g:automatic_config				*g:automatic_config*
+	"match" と "set" のキーを保持した辞書のリストになります。
+	マッチング方法やウィンドウに対する設定をこの変数に記述して使用します。
+
+
+=============================================================================
+設定方法					*automatic-config*
+
+|g:automatic_config| に "match" と "set" をキーを持つ辞書のリストを設定して使用
+します。
+また、これはリストの先頭から順に適用されていきます。
+
+Example: >
+	" "match" でどのウィンドウに対する設定かを指定し、
+	" "set" でその値を設定する
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"buftype" : "help",
+	\		},
+	\		"set" : {
+	\			"height" : 10,
+	\			"move" : "bottom",
+	\		},
+	\	},
+	\	{
+	\		"match" : {
+	\			"bufname" : '\[quickrun output\]',
+	\		},
+	\		"set" : {
+	\			"height" : 5,
+	\		}
+	\	},
+	\]
+<
+
+------------------------------------------------------------------------------
+マッチ						*automatic-config-match*
+
+"match" にはどの条件でマッチングを行うのかを設定します。
+"match" には以下の値を設定することができます。
+複数の条件が設定されている場合は、すべての条件にマッチした時に設定が実行されま
+す。
+い。
+
+キー名		型		説明~
+filetype	(文字列)	|'filetype'| の値と比較
+buftype"	(文字列)	|'buftype'| の値と比較
+bufname		(文字列)	|bufname()| の値と比較
+autocmds	(リスト)	呼び出されたい |autocmd| のリスト
+matchlist	(リスト)	使用する |automatic-matcher| のリスト
+
+
+詳しくは |automatic-matcher| も参照してください。
+
+
+------------------------------------------------------------------------------
+セット						*automatic-config-set*
+
+"match" には条件に一致した場合の設定方法を記述します。
+"match" には以下の値を設定することができます。
+
+キー名			型		説明~
+height			(数値)		ウィンドウの高さ
+width 			(数値)		ウィンドの幅
+move			(文字列)	ウィンドウの位置
+setlist			(リスト)	使用する |automatic-setter| のリスト
+is_close_focus_out	(0 or 1)	別のウィンドウへ移動したら閉じる
+
+
+また、適用される順番は順不同です。
+明示的に適用される順番を指定したい場合は "setlist" を使用してください。
+
+詳しくは |automatic-setter| も参照してください。
+
+
+=============================================================================
+マッチ方法					*automatic-matcher*
+
+"match" に設定されている値を参照してマッチングを行います。
+デフォルトでは以下のマッチ方法が使用されます。
+
+- "filetype"
+  |'filetype'| の値と比較します。
+  キー名	型		デフォルト値~
+  filetype	(文字列)	""
+
+- "buftype"
+  |'buftype'| の値と比較します。
+  キー名	型		デフォルト値~
+  buftype	(文字列)	""
+
+- "bufname"
+  |bufname()| の値と比較します。
+  キー名	型		デフォルト値~
+  buftype	(文字列)	""
+
+- "autocmd"
+  どの |atuocmd| から呼び出されたのかを設定します。
+  デフォルトでは |BufWinEnter| 時にマッチします。
+  キー名	型~		デフォルト値~
+  autocmds	(リスト)	["BufWinEnter"]
+
+  この変数には以下の値が設定出来ます。
+
+  "BufWinEnter" : |BufWinEnter|
+  "WinEnter"    : |WinEnter|
+  "WinLeave"    : |WinLeave|
+  "FileType"    : |FileType|
+
+Example: >
+	" "BufWinEnter" と "WinEnter" 時にマッチする定義
+	let s:match = {
+	\	"match" : {
+	\		"autocmds" : ["BufWinEnter", "WinEnter"]
+	\	},
+	\}
+<<
+
+- "apply"
+  {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
+  任意の判定を行いたい場合に使用します。
+  キー名	型		デフォルト値~
+  apply		(関数参照)	1 を返す関数
+Example: >
+	let s:match = {
+	\	"match" : {},
+	\}
+	function! s:match.apply(config, context)
+		" マッチすれば 1 を、そうでなければ 0 を返す
+	endfunction
+<
+
+- "matchlist"
+  どのマッチ方法を使用するのかを設定します。
+  また、このリストに設定された順番でマッチが呼び出されます。
+  キー名	型		デフォルト値~
+  matchlist	(文字列)	すべての matcher
+Example: >
+	" "filetype" と "buftype" のみ使用される
+	" "buftype" → "filetype" の順でチェックする
+	" "autocmds" の設定は無視される
+	let s:match = {
+	\	"match" : {
+	\		"filetype" : "help",
+	\		"buftype"  : "help",
+	\		"autocmds"  : ["BufWinEnter", "BufEnter"]
+	\		"matchlist"  : ["buftype", "filetype"]
+	\	},
+	\}
+<
+
+=============================================================================
+セット方法					*automatic-setter*
+
+"set" に設定されている値を参照して設定を行います。
+デフォルトでは以下のセット方法が使用されます。
+
+- "resize"
+  ウィンドウのサイズを設定します。
+  キー名	型	説明~
+  height	(数値)	ウィンドウの高さ
+  width		(数値)	ウィンドウの幅
+
+- "move"
+  ウィンドウの位置を設定します。
+  キー名	型		説明~
+  move		(文字列)	ウィンドウの位置
+  move には 以下の文字列が設定出来ます。
+  "top"    : 一番上の位置
+  "bottom" : 一番下の位置
+  "right"  : 一番右の位置
+  "left"   : 一番左の位置
+
+- "apply"
+  {config} を受け取る辞書関数 "apply" を呼び出します。
+  任意の処理を行いたい場合に使用します。
+  キー名	型		説明~
+  apply		(関数参照)	{config} を受け取る辞書関数
+Example: >
+	let s:set = {
+	\	"set" : {},
+	\}
+	function! s:set.apply(config)
+		" 任意の処理
+	endfunction
+
+- "setlist"
+  どのセット方法を使用するのかを設定します。
+  また、このリストに設定された順番に設定が適用されます。
+  キー名	型		説明~
+  setlist	(リスト)	setter の名前のリスト
+Example: >
+	" ウィンドウと移動させた後にウィンドウのサイズを設定する
+	let set = {
+	\	"set" : {
+	\		"height" : 20,
+	\		"move" : "top",
+	\		"setlist" : ["move", "resize"]
+	\	},
+	\}
+
+<- "close_window"
+  ウィンドウを閉じる処理を行います。
+  キー名		型		説明~
+  is_close_focus_out	(0 or 1)	1 が設定されていればその
+  					ウィンドウから別のウィン
+					ドウへと移動した際に元の
+					ウィンドウを閉じます。
+
+- "command"
+  コマンドの呼び出しを行います。
+  キー名	型		説明~
+  commands	(リスト)	呼び出して欲しいコマンドを設定し
+  				ます。リストの先頭から順番にコマ
+				ンドを呼び出します。
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
