@@ -110,8 +110,12 @@ height			(数値)		ウィンドウの高さ（行数）
 width 			(数値)		ウィンドの幅（桁数）
 move			(文字列)	ウィンドウの位置
 setlist			(リスト)	使用する |automatic-setter| のリスト
-is_close_focus_out	(0 or 1)	別のウィンドウへ移動したら閉じる
-unsetting		(0 or 1)	マッチしたいずれかの "set" でこの
+is_close_focus_out	(数値)		別のウィンドウへ移動した場合にウィンド
+					ウを閉じるかどうか
+is_open_other_window	(数値)		1 が設定されていればタブページ内に他の
+					ウィンドウが開かれている場合にマッチす
+					る
+unsetting		(数値)		マッチしたいずれかの "set" でこの
 					値に1 が設定してある場合、すべての
 					"set" が処理されない
 
@@ -194,7 +198,13 @@ Example: >
 	function! s:match.apply(config, context)
 		" マッチすれば 1 を、そうでなければ 0 を返す
 	endfunction
-<
+
+- "is_open_other_window"
+  タブページ内にウィンドウが1つしか開かれていないかどうかを判定します。
+  1 が設定されていれば他のウィンドウが開いている場合にマッチします。
+  
+  キー名		型	デフォルト値~
+  is_open_other_window	(数値)	1
 
 - "matchlist"
   どのマッチ方法を使用するのかを設定します。
@@ -269,11 +279,10 @@ Example: >
 
 <- "close_window"
   ウィンドウを閉じる処理を行います。
-  キー名		型		説明~
-  is_close_focus_out	(0 or 1)	1 が設定されていればその
-  					ウィンドウから別のウィン
-					ドウへと移動した際に元の
-					ウィンドウを閉じます。
+  キー名		型	説明~
+  is_close_focus_out	(数値)	1 が設定されていればそのウィンドウ
+  				から別のウィンドウへと移動した際に
+				元のウィンドウを閉じます。
 
 - "command"
   コマンドの呼び出しを行います。
