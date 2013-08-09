@@ -117,7 +117,7 @@ width 			(任意)		ウィンドの幅（桁数）
 move			(文字列)	ウィンドウの位置
 setlist			(リスト)	使用する |automatic-setter| のリスト
 is_close_focus_out	(数値)		別のウィンドウへ移動した場合にウィンド
-					ウを閉じるかどうか
+close_window_cmd	(文字列)	ウィンドウと閉じる際に使用するコマンド
 unsetting		(数値)		マッチしたいずれかの "set" でこの
 					値に1 が設定してある場合、すべての
 					"set" が処理されない
@@ -177,6 +177,8 @@ filename	(文字列)	ファイルのフルパス
   "WinEnter"    : |WinEnter|
   "WinLeave"    : |WinLeave|
   "FileType"    : |FileType|
+  "CmdwinEnter" : |CmdwinEnter|
+  "CmdwinLeave" : |CmdwinLeave|
 
 Example: >
 	" "BufWinEnter" と "WinEnter" 時にマッチする定義
@@ -298,10 +300,14 @@ Example: >
 
 - "close_window"
   ウィンドウを閉じる処理を行います。
-  名前			型	説明~
-  is_close_focus_out	(数値)	1 が設定されていればそのウィンドウ
-  				から別のウィンドウへと移動した際に
-				元のウィンドウを閉じます。
+  名前			型		説明~
+  close_window_cmd	(文字列)	ウィンドウを閉じる際に使
+  					用するコマンドです。
+  					デフォルト："close"
+  is_close_focus_out	(数値)		1 が設定されていればその
+  					ウィンドウから別のウィン
+					ドウへと移動した際に元の
+					ウィンドウを閉じます。
 
 - "command"
   コマンドの呼び出しを行います。
