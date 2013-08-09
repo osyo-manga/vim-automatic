@@ -89,12 +89,15 @@ Example: >
 す。
 い。
 
-名前		型		説明~
-filetype	(文字列)	|'filetype'| の値と比較
-buftype		(文字列)	|'buftype'| の値と比較
-bufname		(文字列)	|bufname()| の値と比較
-autocmds	(リスト)	呼び出されたい |autocmd| のリスト
-matchlist	(リスト)	使用する |automatic-matcher| のリスト
+名前			型		説明~
+filetype		(文字列)	|'filetype'| の値と比較
+buftype			(文字列)	|'buftype'| の値と比較
+bufname			(文字列)	|bufname()| の値と比較
+autocmds		(リスト)	呼び出されたい |autocmd| のリスト
+is_open_other_window	(数値)		1 が設定されていればタブページ内に他の
+					ウィンドウが開かれている場合にマッチす
+					る
+matchlist		(リスト)	使用する |automatic-matcher| のリスト
 
 
 詳しくは |automatic-matcher| も参照してください。
@@ -115,9 +118,6 @@ move			(文字列)	ウィンドウの位置
 setlist			(リスト)	使用する |automatic-setter| のリスト
 is_close_focus_out	(数値)		別のウィンドウへ移動した場合にウィンド
 					ウを閉じるかどうか
-is_open_other_window	(数値)		1 が設定されていればタブページ内に他の
-					ウィンドウが開かれている場合にマッチす
-					る
 unsetting		(数値)		マッチしたいずれかの "set" でこの
 					値に1 が設定してある場合、すべての
 					"set" が処理されない
@@ -332,12 +332,12 @@ Example: >
 <
 
 
-unite.vim のウィンドウから移動した場合、unite.vim のウィンドウを閉じる
+ヘルプウィンドウから移動した場合、ウィンドウを閉じる
 >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
-	\			"filetype" : "unite",
+	\			"buftype" : "help",
 	\		},
 	\		"set" : {
 	\			"is_close_focus_out" : 1,
