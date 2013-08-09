@@ -3,46 +3,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-function! s:multidict()
-	let self = {
-\		"list" : []
-\	}
-	
-	function! self.find_first(key)
-		let i = 0
-		for [key, value] in self.list
-			if key >= a:key
-				return i
-			endif
-			let i = i + 1
-		endfor
-		return i
-	endfunction
-
-
-	function! self.find_values(key)
-		return map(filter(deepcopy(self.list), "v:val[0] == a:key"), "v:val[1]")
-	endfunction
-
-
-	function! self.insert(key, value)
-		let index = self.find_first(a:key)
-		call insert(self.list, [a:key, a:value], index)
-	endfunction
-
-
-	function! self.values()
-		return map(deepcopy(self.list), "v:val[1]")
-	endfunction
-
-	function! self.clear()
-		let self.list = []
-	endfunction
-
-	return self
-endfunction
-
-
 function! automatic#make_current_context(...)
 	let base = get(a:, 1, {})
 	let bufname = bufname("%")
