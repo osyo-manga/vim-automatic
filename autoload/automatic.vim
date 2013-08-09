@@ -23,6 +23,14 @@ function! automatic#regist_matcher(name, func)
 endfunction
 
 
+function! automatic#load_matcher()
+	for name in map(split(globpath(&rtp, "autoload/automatic/matcher/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
+		call automatic#regist_matcher(name, function("automatic#matcher#" . name . "#apply"))
+	endfor
+endfunction
+call automatic#load_matcher()
+
+
 
 function! s:matcher_autocmd(config, context)
 	if !has_key(a:context, "autocmd")
@@ -104,24 +112,6 @@ function! automatic#load_setter()
 endfunction
 call automatic#load_setter()
 
-
-function! s:setter_move(config, ...)
-	if !has_key(a:config, "move")
-		return
-	endif
-	let move_keys = {
-\		"top"    : "\<C-w>K",
-\		"bottom" : "\<C-w>J",
-\		"left"   : "\<C-w>H",
-\		"right"  : "\<C-w>L",
-\	}
-	
-	let move_key = get(move_keys, a:config.move, "")
-	if !empty(move_key)
-		execute "normal!" move_key
-	endif
-endfunction
-call automatic#regist_setter("move", function("s:setter_move"))
 
 
 function! s:setter_apply(config, ...)
