@@ -106,8 +106,8 @@ endfunction
 
 
 function! automatic#load_setter()
-	for name in map(split(globpath(&rtp, "autoload/automatic/setter/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
-		call automatic#regist_setter(name, function("automatic#setter#" . name . "#apply"))
+	for name in map(split(globpath(&rtp, "autoload/automatic/setters/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
+		call automatic#regist_setter(name, function("automatic#setters#" . name . "#apply"))
 	endfor
 endfunction
 call automatic#load_setter()

@@ -2,7 +2,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! automatic#setter#close_window#apply(config, ...)
+function! automatic#setters#close_window#apply(config, ...)
 	if get(a:config, "is_close_focus_out", 0)
 		let w:automatic_setter_close_window = 1
 		let w:automatic_setter_close_window_cmd = get(a:config, "close_window_cmd", "close")

@@ -21,7 +21,7 @@ function! s:setter_move(config, ...)
 endfunction
 
 
-function! automatic#setter#move#apply(config, ...)
+function! automatic#setters#move#apply(config, ...)
 	return s:setter_move(a:config)
 endfunction
 

@@ -30,7 +30,7 @@ function! s:width(value)
 endfunction
 
 
-function! automatic#setter#resize#apply(config, ...)
+function! automatic#setters#resize#apply(config, ...)
 	if has_key(a:config, "height")
 		call s:height(a:config.height)
 	endif
