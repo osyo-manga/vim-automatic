@@ -445,5 +445,21 @@ Example: >
 <
 
 
+Vim の起動後に GUIウィンドウのサイズを変更する
+>
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"autocmds" : ["VimEnter"],
+	\			"is_open_other_window" : 0
+	\		},
+	\		"set" : {
+	\			"lines" : 50,
+	\			"columes" : 80,
+	\		},
+	\	},
+	\]
+<
+
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

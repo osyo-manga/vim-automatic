@@ -20,6 +20,7 @@ augroup automatic
 	autocmd FileType    * call automatic#run({"autocmd" : "FileType"})
 	autocmd CmdwinEnter * call automatic#run({"autocmd" : "CmdwinEnter"})
 	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
+	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
 augroup END
 
 
