@@ -183,6 +183,8 @@ filename	(文字列)	ファイルのフルパス
   "FileType"    : |FileType|
   "CmdwinEnter" : |CmdwinEnter|
   "CmdwinLeave" : |CmdwinLeave|
+  "VimEnter"    : |VimEnter|
+  "GUIEnter"    : |GUIEnter|
 
 Example: >
 	" "BufWinEnter" と "WinEnter" 時にマッチする定義
@@ -450,7 +452,7 @@ Vim の起動後に GUIウィンドウのサイズを変更する
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
-	\			"autocmds" : ["VimEnter"],
+	\			"autocmds" : ["GUIEnter"],
 	\			"is_open_other_window" : 0
 	\		},
 	\		"set" : {

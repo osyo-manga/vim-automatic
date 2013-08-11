@@ -21,6 +21,7 @@ augroup automatic
 	autocmd CmdwinEnter * call automatic#run({"autocmd" : "CmdwinEnter"})
 	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
 	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
+	autocmd GUIEnter    * call automatic#run({"autocmd" : "GUIEnter"})
 augroup END
 
 
