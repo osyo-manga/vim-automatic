@@ -38,6 +38,10 @@ function! automatic#setters#gui_window#apply(config, ...)
 	if has_key(a:config, "columns")
 		call s:columns(a:config.columns)
 	endif
+
+	let x = get(a:config, "winpos_x", getwinposx())
+	let y = get(a:config, "winpos_y", getwinposy())
+	execute "winpos" x y
 endfunction
 
 

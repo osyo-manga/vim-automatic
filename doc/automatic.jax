@@ -51,10 +51,15 @@ g:automatic_default_set_config			*g:automatic_default_set_config*
 =============================================================================
 設定方法					*automatic-config*
 
-|g:automatic_config| に "match" と "set" をキーを持つ辞書のリストを設定して使用
-します。
+|g:automatic_config| に "match" と "set" をキーを持つ辞書のリストを設定して
+使用します。
 "match" にはマッチする条件を、"set" にはセットする値を設定します。
-また、これはリストの先頭から順に適用されていきます。
+これはリストの先頭から順に適用されていきます。
+"match" の値をチェックするタイミングは指定がなければ |BufWinEnter| 時に行わ
+れます。
+チェックするタイミングは |automatic-matcher-autocmd| で指定することができま
+す。
+
 
 Example: >
 	" "match" でどのウィンドウに対する設定かを指定し、
@@ -87,7 +92,7 @@ Example: >
 "match" には以下の値を設定することができます。
 複数の条件が設定されている場合は、すべての条件にマッチした時に設定が実行されま
 す。
-い。
+
 
 名前			型		説明~
 filetype		(文字列)	|'filetype'| の値と比較
@@ -121,13 +126,15 @@ close_window_cmd	(文字列)	ウィンドウと閉じる際に使用するコマ
 unsetting		(数値)		マッチしたいずれかの "set" でこの
 					値に1 が設定してある場合、すべての
 					"set" が処理されない
-lines			(任意)		'lines' に設定される値
+lines			(数値)		'lines' に設定される値
 					または現在の'lines'のパーセンテージ
-columns			(任意)		'columns' に設定される値
+columns			(数値)		'columns' に設定される値
 					または現在の'columns'のパーセンテージ
+winpos_x		(数値)		GUIウィンドウの X 座標
+winpos_y		(数値)		GUIウィンドウの Y 座標
 
 
-また、適用される順番は順不同です。
+上記の値が適用される順番は決定していません。
 明示的に適用される順番を指定したい場合は "setlist" を使用してください。
 
 詳しくは |automatic-setter| も参照してください。
@@ -160,28 +167,28 @@ unite_bufname		(文字列)	unite.vim の |unite-options-buffer-name|
 また、デフォルト値がない名前はすべての場合にマッチします。
 
 
-- "filetype"
+- "filetype"					*automatic-matcher-filetype*
   |'filetype'| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   filetype	(文字列)	""
 
 
-- "buftype"
+- "buftype"					*automatic-matcher-buftype*
   |'buftype'| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   buftype	(文字列)	""
 
 
-- "bufname"
+- "bufname"					*automatic-matcher-bufname*
   |bufname()| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   buftype	(文字列)	""
 
 
-- "autocmd"
+- "autocmd"					*automatic-matcher-autocmd*
   どの |atuocmd| から呼び出されたのかを設定します。
   デフォルトでは |BufWinEnter| 時にマッチします。
 
@@ -207,7 +214,7 @@ Example: >
 <<
 
 
-- "apply"
+- "apply"					*automatic-matcher-apply*
   {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
   {config} は現在の "match" の値が渡されます。
   {context} の値は |automatic-config-context| を参照してください。
@@ -224,7 +231,7 @@ Example: >
 	endfunction
 <
 
-- "is_open_other_window"
+- "is_open_other_window"	*automatic-matcher-is_open_other_window*
   タブページ内にウィンドウが1つしか開かれていないかどうかを判定します。
   1 が設定されていれば他のウィンドウが開いている場合にマッチします。
 
@@ -232,7 +239,7 @@ Example: >
   is_open_other_window	(数値)	1
 
 
-- "matchlist"
+- "matchlist"					*automatic-matcher-matchlist*
   どのマッチ方法を使用するのかを設定します。
   また、このリストに設定された順番でマッチが呼び出されます。
 
@@ -251,7 +258,7 @@ Example: >
 <
 
 
-- "unite_sources"
+- "unite_sources"			*automatic-matcher-unite_sources*
   起動した unite-source と比較を行います。
   複数の unite-source 全てにマッチしたい場合は unite_sources に
   いずれかの unite-source でマッチして欲しい場合は
@@ -280,7 +287,7 @@ Example: >
 <
 
 
-- "unite_bufname"
+- "unite_bufname"			*automatic-matcher-unite_bufname*
   |unite-options-buffer-name| と正規表現で比較を行います。
 
   名前		型		デフォルト値~
@@ -293,7 +300,7 @@ Example: >
 "set" に設定されている値を参照して設定を行います。
 デフォルトでは以下のセット方法が使用されます。
 
-- "resize"
+- "resize"					*automatic-setter-resize*
   ウィンドウのサイズを設定します。
 
   名前		型	説明~
@@ -315,7 +322,7 @@ Example: >
 <
 
 
-- "move"
+- "move"					*automatic-setter-move*
   ウィンドウの位置を設定します。
 
   名前		型		説明~
@@ -326,7 +333,8 @@ Example: >
   "right"  : 一番右の位置
   "left"   : 一番左の位置
 
-- "apply"
+
+- "apply"					*automatic-setter-apply*
   {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
   {config} は現在の "set" の値が渡されます。
   {context} の値は |automatic-config-context| を参照してください。
@@ -343,7 +351,7 @@ Example: >
 
 
 
-- "setlist"
+- "setlist"					*automatic-setter-setlist*
   どのセット方法を使用するのかを設定します。
   また、このリストに設定された順番に設定が適用されます。
 
@@ -361,7 +369,7 @@ Example: >
 <
 
 
-- "close_window"
+- "close_window"				*automatic-setter-close_window*
   ウィンドウを閉じる処理を行います。
 
   名前			型		説明~
@@ -374,7 +382,7 @@ Example: >
 					ウィンドウを閉じます。
 
 
-- "command"
+- "command"					*automatic-setter-command*
   コマンドの呼び出しを行います。
 
   名前		型		説明~
@@ -383,18 +391,21 @@ Example: >
 				ンドを呼び出します。
 
 
-- "gui_window"
+- "gui_window"					*automatic-setter-gui_window*
   GUIウィンドウのサイズを設定します。
 
   名前		型		説明~
-  lines		(任意)		'lines' に設定される値
+  lines		(数値)		'lines' に設定される値
 				または現在の'lines'のパーセンテージ
-  columns	(任意)		'columns' に設定される値
+  columns	(数値)		'columns' に設定される値
 				または現在の'columns'のパーセンテージ
+  winpos_x	(数値)		GUIウィンドウの X 座標
+  winpos_y	(数値)		GUIウィンドウの Y 座標
 
 
 =============================================================================
-設定例					*automatic-example*
+設定例						*automatic-example*
+
 
 :help 時のヘルプウィンドウの位置とサイズを設定する
 >
@@ -410,6 +421,21 @@ Example: >
 	\		},
 	\	},
 	\]
+
+	" ヘルプウィンドウを一番下へ移動し、高さを画面全体の 40% のサイズにす
+	" るにする
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"buftype" : "help",
+	\		},
+	\		"set" : {
+	\			"height" : "40%",
+	\			"move" : "bottom",
+	\		},
+	\	},
+	\]
+
 <
 
 
@@ -524,6 +550,26 @@ Vim の起動後に GUIウィンドウのサイズを変更する
 	\	},
 	\]
 <
+
+
+
+Vim の起動後に GUIウィンドウの位置を変更する
+>
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"autocmds" : ["GUIEnter"],
+	\			"is_open_other_window" : 0
+	\		},
+	\		"set" : {
+	\			"winpos_x" : 100,
+	\			"winpos_y" : 50,
+	\		},
+	\	},
+	\]
+<
+
+
 
 
 unite.vim の |unite-options-buffer-name| で設定を切り替える
