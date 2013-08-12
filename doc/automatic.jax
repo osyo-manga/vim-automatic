@@ -150,6 +150,7 @@ unite_sources		(リスト)	unite.vim の source 名
 					リストの全てにマッチする
 any_unite_sources	(リスト)	unite.vim の source 名
 					リストのいずれかにマッチする
+unite_bufname		(文字列)	unite.vim の |unite-options-buffer-name|
 
 =============================================================================
 マッチ方法					*automatic-matcher*
@@ -160,21 +161,21 @@ any_unite_sources	(リスト)	unite.vim の source 名
 
 
 - "filetype"
-  |'filetype'| の値と比較します。
+  |'filetype'| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   filetype	(文字列)	""
 
 
 - "buftype"
-  |'buftype'| の値と比較します。
+  |'buftype'| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   buftype	(文字列)	""
 
 
 - "bufname"
-  |bufname()| の値と比較します。
+  |bufname()| の値と正規表現で比較します。
 
   名前		型		デフォルト値~
   buftype	(文字列)	""
@@ -251,9 +252,9 @@ Example: >
 
 
 - "unite_sources"
-  起動した unite-source にマッチする設定です。
-  複数の unite-source で起動した場合にマッチして欲しい場合は unite_sources に
-  いずれかの unite-source で起動した場合にマッチして欲しい場合は
+  起動した unite-source と比較を行います。
+  複数の unite-source 全てにマッチしたい場合は unite_sources に
+  いずれかの unite-source でマッチして欲しい場合は
   any_unite_sources にそれぞれ source 名のリストを設定します。
 
   名前			型		デフォルト値~
@@ -276,8 +277,14 @@ Example: >
 	\	"filetype" : "unite",
 	\	"any_unite_sources" : ['file', 'directory'],
 	}
-
 <
+
+
+- "unite_bufname"
+  |unite-options-buffer-name| と正規表現で比較を行います。
+
+  名前		型		デフォルト値~
+  unite_bufname	(文字列)	""
 
 
 =============================================================================
@@ -516,6 +523,36 @@ Vim の起動後に GUIウィンドウのサイズを変更する
 	\		},
 	\	},
 	\]
+<
+
+
+unite.vim の |unite-options-buffer-name| で設定を切り替える
+>
+	" Unite -buffer-name=large
+	" で起動した場合はウィンドウサイズを大きくし、
+	" Unite -buffer-name=small
+	" で起動した場合はウィンドウサイズを小さくする
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"filetype" : 'unite',
+	\			"unite_bufname" : 'large',
+	\		},
+	\		"set" : {
+	\			"height" : "80%",
+	\		}
+	\	},
+	\	{
+	\		"match" : {
+	\			"filetype" : 'unite',
+	\			"unite_bufname" : 'small',
+	\		},
+	\		"set" : {
+	\			"height" : "20%",
+	\		}
+	\	},
+	\]
+
 <
 
 ==============================================================================
