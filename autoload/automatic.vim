@@ -24,8 +24,8 @@ endfunction
 
 
 function! automatic#load_matcher()
-	for name in map(split(globpath(&rtp, "autoload/automatic/matcher/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
-		call automatic#regist_matcher(name, function("automatic#matcher#" . name . "#apply"))
+	for name in map(split(globpath(&rtp, "autoload/automatic/matchers/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
+		call automatic#regist_matcher(name, function("automatic#matchers#" . name . "#is_match"))
 	endfor
 endfunction
 call automatic#load_matcher()

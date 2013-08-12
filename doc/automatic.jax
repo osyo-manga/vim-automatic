@@ -140,38 +140,50 @@ columns			(任意)		'columns' に設定される値
 |automatic-macher| や |automatic-setter| から参照されます。
 
 
-名前		型		値~
-filetype	(文字列)	'filetype'
-buftype		(文字列)	'buftype'
-bufname		(文字列)	|bufname()|
-autocmd		(文字列)	呼び出された |autocmd| の値
-filename	(文字列)	ファイルのフルパス
-
+名前			型		値~
+filetype		(文字列)	'filetype'
+buftype			(文字列)	'buftype'
+bufname			(文字列)	|bufname()|
+autocmd			(文字列)	呼び出された |autocmd| の値
+filename		(文字列)	ファイルのフルパス
+unite_sources		(リスト)	unite.vim の source 名
+					リストの全てにマッチする
+any_unite_sources	(リスト)	unite.vim の source 名
+					リストのいずれかにマッチする
 
 =============================================================================
 マッチ方法					*automatic-matcher*
 
 "match" に設定されている値を参照してマッチングを行います。
 デフォルトでは以下のマッチ方法が使用されます。
+また、デフォルト値がない名前はすべての場合にマッチします。
+
 
 - "filetype"
   |'filetype'| の値と比較します。
+
   名前		型		デフォルト値~
   filetype	(文字列)	""
 
+
 - "buftype"
   |'buftype'| の値と比較します。
+
   名前		型		デフォルト値~
   buftype	(文字列)	""
 
+
 - "bufname"
   |bufname()| の値と比較します。
+
   名前		型		デフォルト値~
   buftype	(文字列)	""
+
 
 - "autocmd"
   どの |atuocmd| から呼び出されたのかを設定します。
   デフォルトでは |BufWinEnter| 時にマッチします。
+
   名前		型		デフォルト値~
   autocmds	(リスト)	["BufWinEnter"]
 
@@ -189,19 +201,19 @@ filename	(文字列)	ファイルのフルパス
 Example: >
 	" "BufWinEnter" と "WinEnter" 時にマッチする定義
 	let s:match = {
-	\	"match" : {
-	\		"autocmds" : ["BufWinEnter", "WinEnter"]
-	\	},
+	\	"autocmds" : ["BufWinEnter", "WinEnter"]
 	\}
 <<
+
 
 - "apply"
   {config} と {context} を受け取る辞書関数 "apply" を呼び出します。
   {config} は現在の "match" の値が渡されます。
   {context} の値は |automatic-config-context| を参照してください。
   任意の判定を行いたい場合に使用します。
+
   名前		型		デフォルト値~
-  apply		(関数参照)	1 を返す関数
+  apply		(関数参照)	なし
 Example: >
 	let s:match = {
 	\	"match" : {},
@@ -209,17 +221,20 @@ Example: >
 	function! s:match.apply(config, context)
 		" マッチすれば 1 を、そうでなければ 0 を返す
 	endfunction
+<
 
 - "is_open_other_window"
   タブページ内にウィンドウが1つしか開かれていないかどうかを判定します。
   1 が設定されていれば他のウィンドウが開いている場合にマッチします。
-  
+
   名前			型	デフォルト値~
   is_open_other_window	(数値)	1
+
 
 - "matchlist"
   どのマッチ方法を使用するのかを設定します。
   また、このリストに設定された順番でマッチが呼び出されます。
+
   名前		型		デフォルト値~
   matchlist	(文字列)	すべての matcher
 Example: >
@@ -227,14 +242,43 @@ Example: >
 	" "buftype" → "filetype" の順でチェックする
 	" "autocmds" の設定は無視される
 	let s:match = {
-	\	"match" : {
-	\		"filetype" : "help",
-	\		"buftype"  : "help",
-	\		"autocmds"  : ["BufWinEnter", "BufEnter"]
-	\		"matchlist"  : ["buftype", "filetype"]
-	\	},
+	\	"filetype" : "help",
+	\	"buftype"  : "help",
+	\	"autocmds"  : ["BufWinEnter", "BufEnter"],
+	\	"matchlist"  : ["buftype", "filetype"]
 	\}
 <
+
+
+- "unite_sources"
+  起動した unite-source にマッチする設定です。
+  複数の unite-source で起動した場合にマッチして欲しい場合は unite_sources に
+  いずれかの unite-source で起動した場合にマッチして欲しい場合は
+  any_unite_sources にそれぞれ source 名のリストを設定します。
+
+  名前			型		デフォルト値~
+  unite_sources		(リスト)	なし
+  any_unite_sources	(リスト)	なし
+Example: >
+	" file と file/new が含まれている unite.vim を起動した場合にマッチ
+	" e.g. :Unite file file/new
+	let s:match = {
+	\	"filetype" : "unite",
+	\	"unite_sources" : ['file', 'file/new'],
+	}
+
+	" file か directory が含まれている unite.vim を起動した場合にマッチ
+	" e.g.
+	" :Unite file directory
+	" :Unite file
+	" :Unite directory
+	let s:match = {
+	\	"filetype" : "unite",
+	\	"any_unite_sources" : ['file', 'directory'],
+	}
+
+<
+
 
 =============================================================================
 セット方法					*automatic-setter*
@@ -244,6 +288,7 @@ Example: >
 
 - "resize"
   ウィンドウのサイズを設定します。
+
   名前		型	説明~
   height	(任意)	ウィンドウの高さ（行数）
 			または画面上の行数のパーセンテージ(文字列)
@@ -265,6 +310,7 @@ Example: >
 
 - "move"
   ウィンドウの位置を設定します。
+
   名前		型		説明~
   move		(文字列)	ウィンドウの位置
   move には 以下の文字列が設定出来ます。
@@ -288,9 +334,12 @@ Example: >
 		" 任意の処理
 	endfunction
 
+
+
 - "setlist"
   どのセット方法を使用するのかを設定します。
   また、このリストに設定された順番に設定が適用されます。
+
   名前		型		説明~
   setlist	(リスト)	setter の名前のリスト
 Example: >
@@ -304,8 +353,10 @@ Example: >
 	\}
 <
 
+
 - "close_window"
   ウィンドウを閉じる処理を行います。
+
   名前			型		説明~
   close_window_cmd	(文字列)	ウィンドウを閉じる際に使
   					用するコマンドです。
@@ -315,15 +366,19 @@ Example: >
 					ドウへと移動した際に元の
 					ウィンドウを閉じます。
 
+
 - "command"
   コマンドの呼び出しを行います。
+
   名前		型		説明~
   commands	(リスト)	呼び出して欲しいコマンドを設定し
   				ます。リストの先頭から順番にコマ
 				ンドを呼び出します。
 
+
 - "gui_window"
   GUIウィンドウのサイズを設定します。
+
   名前		型		説明~
   lines		(任意)		'lines' に設定される値
 				または現在の'lines'のパーセンテージ
