@@ -105,6 +105,7 @@ is_open_other_window	(数値)		1 が設定されていればタブページ内�
 matchlist		(リスト)	使用する |automatic-matcher| のリスト
 set_once_in_window	(数値)		1 が設定されていればマッチしたウィンド
 					ウでは1度しか "set" が行われない
+expr			(文字列)	|eval()| で評価する
 
 
 詳しくは |automatic-matcher| も参照してください。
@@ -166,6 +167,7 @@ unite_sources		(リスト)	unite.vim の source 名
 any_unite_sources	(リスト)	unite.vim の source 名
 					リストのいずれかにマッチする
 unite_bufname		(文字列)	unite.vim の |unite-options-buffer-name|
+
 
 =============================================================================
 マッチ方法					*automatic-matcher*
@@ -310,6 +312,13 @@ Example: >
 
   名前			型		デフォルト値~
   set_once_in_window	(数値)		1
+
+
+- "expr"				*automatic-matcher-expr*
+  設定されている文字列を |eval()| で評価した値を使用します。
+
+  名前			型		デフォルト値~
+  expr			(文字列)	なし
 
 
 
