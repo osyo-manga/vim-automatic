@@ -78,9 +78,6 @@ endfunction
 call automatic#regist_matcher("is_open_other_window", function("s:matcher_is_open_other_window"))
 
 
-
-
-
 function! s:is_match_all(config, context)
 	let matchlist = get(a:config, "matchlist", keys(s:matcher))
 	for name in matchlist
