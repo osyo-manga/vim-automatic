@@ -135,10 +135,12 @@ call automatic#regist_setter("command", function("s:setter_command"))
 
 
 
-function! automatic#set_current(config, context)
+function! automatic#set_current(config, context, unsettings)
 	let setlist = get(a:config, "setlist", keys(s:setter))
 	for name in setlist
-		call s:setter[name](a:config, a:context)
+		if index(a:unsettings, name) == -1
+			call s:setter[name](a:config, a:context)
+		endif
 	endfor
 endfunction
 
@@ -150,14 +152,16 @@ function! automatic#run(...)
 	let def_match = g:automatic_default_match_config
 
 	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(extend(deepcopy(def_match), get(v:val, 'match', {})), context)")
+	let unsettings = []
 	for config in setlist
 		if get(get(config, "set", {}), "unsetting", 0)
 			return -1
 		endif
+		let unsettings = get(get(config, "set", {}), "unsettings", [])
 	endfor
 
 	let def_set = g:automatic_default_set_config
-	call map(setlist, "automatic#set_current(extend(deepcopy(def_set), get(v:val, 'set', {})), context)")
+	call map(setlist, "automatic#set_current(extend(deepcopy(def_set), get(v:val, 'set', {})), context, unsettings)")
 endfunction
 
 
