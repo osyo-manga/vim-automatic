@@ -33,7 +33,7 @@ call automatic#load_matcher()
 
 
 function! s:matcher_autocmd(config, context)
-	if !has_key(a:context, "autocmd")
+	if empty(get(a:context, "autocmd", ""))
 		return 1
 	endif
 	let autocmds = get(a:config, "autocmds", ["BufWinEnter"])
