@@ -52,10 +52,10 @@ g:automatic_default_set_config			*g:automatic_default_set_config*
 
 
 ==============================================================================
-インターフェース				*gift-interface*
+インターフェース				*automatic-interface*
 
 ------------------------------------------------------------------------------
-関数						*gift-functions*
+関数						*automatic-functions*
 
 					*automatic#close_window_for_tag()*
 automatic#close_window_for_tag({tag})
