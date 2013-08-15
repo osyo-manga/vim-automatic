@@ -2,6 +2,10 @@
 
 ウィンドウを開いた時にそのウィンドウに対して設定を行うプラグインです。
 
+##Requirement
+
+* [gift.vim](https://github.com/osyo-manga/vim-gift)
+
 ##Screencapture
 ![capture](https://f.cloud.github.com/assets/214488/942527/bd4795b6-01b9-11e3-9190-0200ab4d54f8.gif)
 

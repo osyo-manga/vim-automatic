@@ -17,6 +17,9 @@
 |automatic| は任意のタイミングでウィンドウに対する設定を行うプラグインです。
 
 
+Requirement:
+	gift.vim - https://github.com/osyo-manga/vim-gift
+
 
 ==============================================================================
 使い方						*automatic-usage*
