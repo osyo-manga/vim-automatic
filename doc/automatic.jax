@@ -48,6 +48,28 @@ g:automatic_default_set_config			*g:automatic_default_set_config*
 	優先して使用されます。
 
 
+==============================================================================
+インターフェース				*gift-interface*
+
+------------------------------------------------------------------------------
+関数						*gift-functions*
+
+					*automatic#close_window_for_tag()*
+automatic#close_window_for_tag({tag})
+	{tag} が設定されているすべてのウィンドウを閉じます。
+	{tag} は |automatic-setter-tags| でウィンドウに対して設定を行うことが
+	できます。
+	ウィンドウを閉じるコマンドは |automatic-setter-close_window| で設定さ
+	れた "close_window_cmd" が使用されます。
+	"close_window_cmd" が設定されていなければ |:close| が使用されます。
+
+			*automatic#close_window_for_tag_from_current_tabpage()*
+automatic#close_window_for_tag_from_current_tabpage({tag})
+	{tag} が設定されているカレントのタブページのウィンドウをすべて閉じ
+	ます。
+	それ以外は |automatic#close_window_for_tag()| と同じです。
+
+
 =============================================================================
 設定方法					*automatic-config*
 
@@ -141,6 +163,7 @@ columns			(数値)		'columns' に設定される値
 					または現在の'columns'のパーセンテージ
 winpos_x		(数値)		GUIウィンドウの X 座標
 winpos_y		(数値)		GUIウィンドウの Y 座標
+tags			(リスト)	ウィンドウに対して任意のタグを設定
 
 
 上記の値が適用される順番は決定していません。
@@ -336,10 +359,10 @@ Example: >
 			または画面上の行数のパーセンテージ(文字列)
   width		(任意)	ウィンドウの幅（桁数）
 			または画面上の桁数のパーセンテージ(文字列)
-  max_height	(数値)		ウィンドウの最大の高さ（行数）
-  min_height	(数値)		ウィンドウの最小の高さ（行数）
-  max_width	(数値)		ウィンドウの最大の幅（桁数）
-  min_width	(数値)		ウィンドウの最小の幅（桁数）
+  max_height	(数値)	ウィンドウの最大の高さ（行数）
+  min_height	(数値)	ウィンドウの最小の高さ（行数）
+  max_width	(数値)	ウィンドウの最大の幅（桁数）
+  min_width	(数値)	ウィンドウの最小の幅（桁数）
 
 Example: >
 	let s:set = {
@@ -438,6 +461,15 @@ Example: >
 				または現在の'columns'のパーセンテージ
   winpos_x	(数値)		GUIウィンドウの X 座標
   winpos_y	(数値)		GUIウィンドウの Y 座標
+
+
+- "tags"					*automatic-setter-tags*
+  ウィンドウに対して任意のタグを設定します。
+  ここで設定したタグは |automatic#close_window_for_tag()| 等で使用することがで
+  きます。
+
+  名前	型		説明~
+  tags	(リスト)	任意のタグのリスト
 
 
 =============================================================================

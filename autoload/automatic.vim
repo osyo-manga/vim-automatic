@@ -163,5 +163,15 @@ endfunction
 
 
 
+function! automatic#close_window_for_tag(tag)
+	return gift#close_window_by("index(gettabwinvar(tabnr, winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
+endfunction
+
+
+function! automatic#close_window_for_tag_from_current_tabpage(tag)
+	return gift#close_window_by("tabpagenr() == tabnr && index(getwinvar(winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
