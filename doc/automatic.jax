@@ -408,7 +408,7 @@ Example: >
 	let s:set = {
 	\	"set" : {},
 	\}
-	function! s:set.apply(config)
+	function! s:set.apply(config, context)
 		" 任意の処理
 	endfunction
 

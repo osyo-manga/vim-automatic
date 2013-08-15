@@ -111,9 +111,9 @@ call automatic#load_setter()
 
 
 
-function! s:setter_apply(config, ...)
+function! s:setter_apply(config, context)
 	if has_key(a:config, "apply")
-		return a:config.apply(a:config)
+		return a:config.apply(a:config, a:context)
 	endif
 	return 1
 endfunction
