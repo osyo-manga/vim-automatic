@@ -747,4 +747,30 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 
 
 ==============================================================================
+FAQ						*automatic-FAQ*
+
+Q. "filetype" : "unite" で設定が行われない。
+
+A. unite.vim を起動した後に呼ばれる |BufWinEnter| 時にはまだ 'filetype' が設定
+   されいません。
+   これを回避する場合は "bufname" で判定を行うか、"autocmds" に ["FileType"]
+   を設定して |FileType| 時に判定を行うようにする必要があります。
+
+
+Q. unite.vim のウィンドウが変更されない
+
+A. unite.vim は |BufWinEnter| 後に unite.vim 側でウィンドウが変更される為、
+   ウィンドウのりサイズが行われない場合があります。
+   ただし、既存の unite.vim のバッファが使用された場合はウィンドウサイズは
+   "set" で設定したものに変更されます。
+   それ以外の "set" は設定されます。
+
+
+Q. :help すると "set" が2回呼ばれる
+
+A. :help すると |BufWinEnter| が2回呼ばれます。これは "match" の "buftype" と
+   "filetype" のそれぞれ両方 "help" を設定することで回避できます。
+
+
+==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
