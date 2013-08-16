@@ -84,6 +84,11 @@ automatic#close_window_for_tag_from_current_tabpage({tag})
 れます。
 チェックするタイミングは |automatic-matcher-autocmd| で指定することができま
 す。
+また、|BufWinEnter| よりも後でウィンドウの設定が変更されているケースも有りま
+す。
+（e.g. unite.vim は |BufWinEnter| よりも後でウィンドウサイズが変更されているた
+め、ウィンドウのリサイズが正しく行われない場合があります。
+この場合は正しく設定されない場合があるので注意してください。
 
 
 Example: >
@@ -591,8 +596,6 @@ Example: >
 <
 
 
-
-
 ------------------------------------------------------------------------------
 "set" のデフォルト値を設定する			*automatic-example-6*
 >
@@ -608,7 +611,7 @@ Example: >
 	\	},
 	\	{
 	\		"match" : {
-	\			"bufname" : '\[unite\]',
+	\			"bufname" : '[\[\*]unite[\]\*]',
 	\		},
 	\	},
 	\	{
@@ -671,7 +674,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
-	\			"bufname" : '\[unite\]',
+	\			"bufname" : '[\[\*]unite[\]\*]',
 	\			"unite_bufname" : 'large',
 	\		},
 	\		"set" : {
@@ -680,7 +683,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	\	},
 	\	{
 	\		"match" : {
-	\			"bufname" : '\[unite\]',
+	\			"bufname" : '[\[\*]unite[\]\*]',
 	\			"unite_bufname" : 'small',
 	\		},
 	\		"set" : {
