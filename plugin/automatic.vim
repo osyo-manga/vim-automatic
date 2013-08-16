@@ -22,6 +22,43 @@ augroup automatic
 	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
 	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
 	autocmd GUIEnter    * call automatic#run({"autocmd" : "GUIEnter"})
+	autocmd User BufWinEnterFuture call automatic#run({"autocmd" : "BufWinEnterFuture"})
+augroup END
+
+
+
+let g:automatic_enable_BufWinEnterFuture = get(g:, "automatic_enable_BufWinEnterFuture", 0)
+
+let s:check = 0
+function! s:future(cmd)
+	if s:check
+		return
+	endif
+	let s:check = 1
+
+	let task = {
+\		"updatetime" : &updatetime,
+\		"doautocmd" : a:cmd
+\	}
+	function! task.apply(id)
+		call reunions#taskkill(a:id)
+		if self.updatetime != 1
+			let &updatetime = self.updatetime
+		endif
+		execute "doautocmd <nomodeline> User " . self.doautocmd
+		let s:check = 0
+	endfunction
+	call reunions#task(task)
+	set updatetime=1
+endfunction
+
+augroup automatic-bufwinenter-future
+	autocmd!
+	autocmd User BufWinEnterCursorHold execute ""
+	autocmd BufWinEnter * 
+\		if g:automatic_enable_BufWinEnterFuture
+\|			call s:future("BufWinEnterFuture")
+\|		endif
 augroup END
 
 
