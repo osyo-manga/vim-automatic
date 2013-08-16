@@ -97,6 +97,7 @@ Example: >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
+	\			"filetype" : "help",
 	\			"buftype" : "help",
 	\		},
 	\		"set" : {
@@ -312,7 +313,7 @@ Example: >
 	" file と file/new が含まれている unite.vim を起動した場合にマッチ
 	" e.g. :Unite file file/new
 	let s:match = {
-	\	"bufname" : '\[unite\]',
+	\	"bufname" : '[\[\*]unite[\]\*]',
 	\	"unite_sources" : ['file', 'file/new'],
 	}
 
@@ -322,7 +323,7 @@ Example: >
 	" :Unite file
 	" :Unite directory
 	let s:match = {
-	\	"bufname" : '\[unite\]',
+	\	"bufname" : '[\[\*]unite[\]\*]',
 	\	"any_unite_sources" : ['file', 'directory'],
 	}
 <
