@@ -487,6 +487,7 @@ Example: >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
+	\			"filetype" : "help",
 	\			"buftype" : "help",
 	\		},
 	\		"set" : {
@@ -501,6 +502,7 @@ Example: >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
+	\			"filetype" : "help",
 	\			"buftype" : "help",
 	\		},
 	\		"set" : {
@@ -519,6 +521,7 @@ Example: >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
+	\			"filetype" : "help",
 	\			"buftype" : "help",
 	\		},
 	\		"set" : {
@@ -535,6 +538,7 @@ Example: >
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
+	\			"filetype" : "help",
 	\			"buftype" : "help",
 	\		},
 	\		"set" : {
