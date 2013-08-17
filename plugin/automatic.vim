@@ -47,7 +47,7 @@ function! s:future(cmd)
 \	}
 
 	function! task.apply(id)
-		echom "apply"
+" 		echom "apply"
 		execute "doautocmd <nomodeline> User " . self.doautocmd
 	endfunction
 
