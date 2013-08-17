@@ -68,7 +68,7 @@ endfunction
 
 augroup automatic-bufwinenter-future
 	autocmd!
-	autocmd User BufWinEnterCursorHold execute ""
+	autocmd User BufWinEnterFuture execute ""
 	autocmd BufWinEnter *
 \		if g:automatic_enable_autocmd_Future
 \|			call s:future("BufWinEnterFuture")
