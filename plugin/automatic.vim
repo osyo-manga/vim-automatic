@@ -27,37 +27,57 @@ augroup END
 
 
 
-let g:automatic_enable_BufWinEnterFuture = get(g:, "automatic_enable_BufWinEnterFuture", 0)
+let g:automatic_enable_autocmd_Future = get(g:, "automatic_enable_autocmd_Future", 0)
 
-let s:check = 0
+
+let s:check_future = {}
 function! s:future(cmd)
-	if s:check
+	if get(s:check_future, a:cmd, 0)
 		return
 	endif
-	let s:check = 1
+
+	let s:check_future[a:cmd] = 1
+" 	echom "future"
+" 	echom "s:check :" . s:check
+" 	echom "updatetime :" . &updatetime
 
 	let task = {
 \		"updatetime" : &updatetime,
 \		"doautocmd" : a:cmd
 \	}
+
 	function! task.apply(id)
-		call reunions#taskkill(a:id)
+		echom "apply"
+		execute "doautocmd <nomodeline> User " . self.doautocmd
+	endfunction
+
+	function! task.kill()
+" 		echom "kill"
+" 		echom "updatetime :" . &updatetime
+" 		echom "self.updatetime :" . self.updatetime
 		if self.updatetime != 1
 			let &updatetime = self.updatetime
 		endif
-		execute "doautocmd <nomodeline> User " . self.doautocmd
-		let s:check = 0
+		let s:check_future[self.doautocmd] = 0
 	endfunction
-	call reunions#task(task)
+
+	let id = reunions#task_once(task)
 	set updatetime=1
 endfunction
+
 
 augroup automatic-bufwinenter-future
 	autocmd!
 	autocmd User BufWinEnterCursorHold execute ""
-	autocmd BufWinEnter * 
-\		if g:automatic_enable_BufWinEnterFuture
+	autocmd BufWinEnter *
+\		if g:automatic_enable_autocmd_Future
 \|			call s:future("BufWinEnterFuture")
+\|		endif
+
+	autocmd User WinEnterFuture execute ""
+	autocmd WinEnter *
+\		if g:automatic_enable_autocmd_Future
+\|			call s:future("WinEnterFuture")
 \|		endif
 augroup END
 
