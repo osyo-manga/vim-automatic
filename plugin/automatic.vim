@@ -27,7 +27,7 @@ augroup END
 
 
 
-let g:automatic_enable_autocmd_Future = get(g:, "automatic_enable_autocmd_Future", 0)
+let g:automatic_enable_autocmd_Futures = get(g:, "automatic_enable_autocmd_Futures", {})
 
 
 let s:check_future = {}
@@ -68,17 +68,12 @@ endfunction
 
 augroup automatic-bufwinenter-future
 	autocmd!
-	autocmd User BufWinEnterFuture execute ""
+	autocmd User BufWinEnterCursorHold execute ""
 	autocmd BufWinEnter *
-\		if g:automatic_enable_autocmd_Future
+\		if get(g:automatic_enable_autocmd_Futures, "BufWinEnterFuture", 0)
 \|			call s:future("BufWinEnterFuture")
 \|		endif
 
-	autocmd User WinEnterFuture execute ""
-	autocmd WinEnter *
-\		if g:automatic_enable_autocmd_Future
-\|			call s:future("WinEnterFuture")
-\|		endif
 augroup END
 
 
