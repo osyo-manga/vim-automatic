@@ -72,6 +72,8 @@ call automatic#regist_matcher("apply", function("s:matcher_apply"))
 function! s:matcher_is_open_other_window(config, context)
 	if get(a:config, "is_open_other_window", 1)
 		return winnr("$") > 1
+ 	else
+		return winnr("$") == 1
 	endif
 	return 1
 endfunction

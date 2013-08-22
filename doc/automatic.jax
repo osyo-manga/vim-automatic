@@ -276,6 +276,7 @@ Example: >
 - "is_open_other_window"	*automatic-matcher-is_open_other_window*
   タブページ内にウィンドウが1つしか開かれていないかどうかを判定します。
   1 が設定されていれば他のウィンドウが開いている場合にマッチします。
+  0 が設定されていれば他のウィンドウが開かれていない場合にマッチします。
 
   名前			型	デフォルト値~
   is_open_other_window	(数値)	1
