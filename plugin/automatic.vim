@@ -46,7 +46,7 @@ function! s:future(cmd)
 \		"doautocmd" : a:cmd
 \	}
 
-	function! task.apply(id)
+	function! task.apply(...)
 " 		echom "apply"
 		execute "doautocmd <nomodeline> User " . self.doautocmd
 	endfunction
@@ -66,7 +66,7 @@ function! s:future(cmd)
 endfunction
 
 
-augroup automatic-bufwinenter-future
+augroup automatic-future
 	autocmd!
 	autocmd User BufWinEnterCursorHold execute ""
 	autocmd BufWinEnter *
