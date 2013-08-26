@@ -122,7 +122,7 @@ endfunction
 call automatic#regist_setter("apply", function("s:setter_apply"))
 
 
-function! s:setter_command(config, ...)
+function! s:setter_command(config, context)
 	let commands = get(a:config, "commands", [])
 	for command in commands
 		execute command
