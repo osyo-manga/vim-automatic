@@ -315,7 +315,7 @@ Example: >
 	" file と file/new が含まれている unite.vim を起動した場合にマッチ
 	" e.g. :Unite file file/new
 	let s:match = {
-	\	"bufname" : '[\[\*]unite[\]\*]',
+	\	"bufname" : '[[*]unite[]*]',
 	\	"unite_sources" : ['file', 'file/new'],
 	}
 
@@ -325,7 +325,7 @@ Example: >
 	" :Unite file
 	" :Unite directory
 	let s:match = {
-	\	"bufname" : '[\[\*]unite[\]\*]',
+	\	"bufname" : '[[*]unite[]*]',
 	\	"any_unite_sources" : ['file', 'directory'],
 	}
 <
@@ -614,7 +614,7 @@ Example: >
 	\	},
 	\	{
 	\		"match" : {
-	\			"bufname" : '[\[\*]unite[\]\*]',
+	\			"bufname" : '[[*]unite[]*]',
 	\		},
 	\	},
 	\	{
@@ -677,7 +677,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
-	\			"bufname" : '[\[\*]unite[\]\*]',
+	\			"bufname" : '[[*]unite[]*]',
 	\			"unite_bufname" : 'large',
 	\		},
 	\		"set" : {
@@ -686,7 +686,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	\	},
 	\	{
 	\		"match" : {
-	\			"bufname" : '[\[\*]unite[\]\*]',
+	\			"bufname" : '[[*]unite[]*]',
 	\			"unite_bufname" : 'small',
 	\		},
 	\		"set" : {
