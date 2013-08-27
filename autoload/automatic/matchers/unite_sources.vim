@@ -4,11 +4,10 @@ set cpo&vim
 
 
 function! automatic#matchers#unite_sources#is_match(config, ...)
-	try
-		let sources = copy(get(unite#get_current_unite(), "source_names", []))
-	catch
+	if !exists("*unite#get_current_unite")
 		return 1
-	endtry
+	endif
+	let sources = copy(get(unite#get_current_unite(), "source_names", []))
 	if has_key(a:config, "any_unite_sources")
 		return !empty(filter(sources, "index(a:config.any_unite_sources, v:val) != -1"))
 	endif
