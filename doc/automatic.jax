@@ -145,6 +145,7 @@ matchlist		(リスト)	使用する |automatic-matcher| のリスト
 set_once_in_window	(数値)		1 が設定されていればマッチしたウィンド
 					ウでは1度しか "set" が行われない
 expr			(文字列)	|eval()| で評価する
+localtime_expr		(文字列)	現在の時間でチェックする
 
 
 詳しくは |automatic-matcher| も参照してください。
@@ -368,6 +369,30 @@ Example: >
 
   名前			型		デフォルト値~
   expr			(文字列)	なし
+
+
+- "localtime"				*automatic-matcher-local*
+  現在の時間でチェックを行います。
+  localtime_expr には式を渡し、|eval()| でそれを評価します。
+
+  名前			型		デフォルト値~
+  localtime_expr	(文字列)	なし
+
+  localtime_expr の式内では以下の変数が使用できます。
+  
+  "year"   : 西暦 (yyyy)
+  "month"  : 月(01 ～ 12)
+  "day"    : 月の日 (01～31)
+  "hour"   : 24 時間制の時間 (00 ～ 23)
+  "minute" : 月(01 ～ 12)
+  "second" : 秒 (00 ～ 60)
+
+Example: >
+	" 8時から12時の間にマッチ
+	let s:match = {
+	\	"localtime_expr" : "8 <= hour && hour <= 12",
+	}
+<
 
 
 
