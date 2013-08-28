@@ -15,6 +15,12 @@
 概要						*automatic-introduction*
 
 |automatic| は任意のタイミングでウィンドウに対する設定を行うプラグインです。
+デフォルトでは以下の条件の場合に設定が行われます
+
+- |BufWinEnter| が呼ばれた時
+- タブページ内にウィンドウが2つ以上開かれている
+
+上記の条件は |automatic-config-match| によって制御する事ができます。
 
 
 Requirement:
@@ -130,6 +136,7 @@ Example: >
 filetype		(文字列)	|'filetype'| の値と比較
 buftype			(文字列)	|'buftype'| の値と比較
 bufname			(文字列)	|bufname()| の値と比較
+filename		(文字列)	バッファで開かれているファイル名を比較
 autocmds		(リスト)	呼び出されたい |autocmd| のリスト
 is_open_other_window	(数値)		1 が設定されていればタブページ内に他の
 					ウィンドウが開かれている場合にマッチす
@@ -229,6 +236,14 @@ unite_bufname		(文字列)	unite.vim の |unite-options-buffer-name|
 
   名前		型		デフォルト値~
   buftype	(文字列)	""
+
+
+- "filename"					*automatic-matcher-filename*
+  バッファのファイル名を比較を行います。
+  バッファがファイルでなければ比較は行いません。
+
+  名前		型		デフォルト値~
+  filename	(文字列)	""
 
 
 - "autocmd"					*automatic-matcher-autocmd*
@@ -773,6 +788,31 @@ Q. :help すると "set" が2回呼ばれる
 A. :help すると |BufWinEnter| が2回呼ばれます。これは "match" の "buftype" と
    "filetype" のそれぞれ両方 "help" を設定することで回避できます。
 
+
+Q. "autocmds" : ["GUIEnter"] を設定しても "set" が反映されない
+
+A. デフォルトではタブページ内にウィンドウが2つ以上の場合にのみマッチします。
+   |GUIEnter| が呼ばれた時にはタブページ内にウィンドウが1つしかない可能性があ
+   ります。
+   その場合は次のように |automatic-matcher-is_open_other_window| を設定する事
+   で回避する事ができます。
+>
+	" 起動時にウィンドウ位置やサイズを設定する
+	let g:automatic_config = [
+	\	{
+	\		"match" : {
+	\			"autocmds" : ["GUIEnter"],
+	\			"is_open_other_window" : 0
+	\		},
+	\		"set" : {
+	\			"lines" : 50,
+	\			"columes" : 150,
+	\			"winpos_x" : 100,
+	\			"winpos_y" : 50,
+	\		},
+	\	},
+	\]
+<
 
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

@@ -7,11 +7,12 @@ function! automatic#make_current_context(...)
 	let base = get(a:, 1, {})
 	let bufname = bufname("%")
 	return extend({
-\		"filetype" : &filetype,
-\		"bufname"  : bufname,
-\		"buftype"  : &buftype,
-\		"filename" : substitute(fnamemodify(bufname, ":p"), '\\', '/', "g"),
-\		"autocmd"  : "",
+\		"filetype"  : &filetype,
+\		"bufname"   : bufname,
+\		"buftype"   : &buftype,
+\		"filename"  : substitute(fnamemodify(bufname, ":p"), '\\', '/', "g"),
+\		"autocmd"   : "",
+\		"localtime" : localtime(),
 \	}, base)
 endfunction
 
@@ -52,6 +53,16 @@ function! s:matcher_bufname(config, context)
 	return get(a:context, "bufname", "") =~# get(a:config, "bufname", "")
 endfunction
 call automatic#regist_matcher("bufname", function("s:matcher_bufname"))
+
+
+function! s:matcher_filename(config, context)
+	let filename = a:context.filename
+	if !filereadable(a:context.filename)
+		return 1
+	endif
+	return get(a:context, "filename", "") =~# get(a:config, "filename", "")
+endfunction
+call automatic#regist_matcher("filename", function("s:matcher_filename"))
 
 
 function! s:matcher_buftype(config, context)
