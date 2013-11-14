@@ -2,9 +2,20 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:autocmd_histories = []
+function! automatic#clear_autocmd_history()
+	let s:autocmd_histories = []
+endfunction
+
 
 function! automatic#make_current_context(...)
 	let base = get(a:, 1, {})
+	if has_key(base, "autocmd")
+		call add(s:autocmd_histories, base.autocmd)
+		if len(s:autocmd_histories) > g:autocmd_history_size
+			unlet s:autocmd_histories[0]
+		endif
+	endif
 	let bufname = bufname("%")
 	return extend({
 \		"filetype"  : &filetype,
@@ -12,6 +23,7 @@ function! automatic#make_current_context(...)
 \		"buftype"   : &buftype,
 \		"filename"  : substitute(fnamemodify(bufname, ":p"), '\\', '/', "g"),
 \		"autocmd"   : "",
+\		"autocmd_history"   : s:autocmd_histories,
 \		"localtime" : localtime(),
 \	}, base)
 endfunction
@@ -38,7 +50,9 @@ function! s:matcher_autocmd(config, context)
 		return 1
 	endif
 	let autocmds = get(a:config, "autocmds", ["BufWinEnter"])
+	let pattern  = get(a:config, "autocmd_history_pattern", "NotFound")
 	return index(autocmds, a:context.autocmd) != -1
+\		|| join(get(a:context, "autocmd_history"), "") =~ pattern
 endfunction
 call automatic#regist_matcher("autocmd", function("s:matcher_autocmd"))
 

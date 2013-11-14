@@ -8,9 +8,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let g:automatic_config = get(g:, "automatic_config", [])
+let g:automatic_config               = get(g:, "automatic_config", [])
 let g:automatic_default_match_config = get(g:, "automatic_default_match_config", {})
-let g:automatic_default_set_config = get(g:, "automatic_default_set_config", {})
+let g:automatic_default_set_config   = get(g:, "automatic_default_set_config", {})
+let g:autocmd_history_size           = get(g:, "autocmd_history_size", 20)
 
 augroup automatic
 	autocmd!
@@ -22,6 +23,7 @@ augroup automatic
 	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
 	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
 	autocmd GUIEnter    * call automatic#run({"autocmd" : "GUIEnter"})
+	autocmd CursorMoved * call automatic#run({"autocmd" : "CursorMoved"})
 	autocmd User BufWinEnterFuture call automatic#run({"autocmd" : "BufWinEnterFuture"})
 augroup END
 
