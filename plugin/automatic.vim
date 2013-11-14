@@ -24,6 +24,7 @@ augroup automatic
 	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
 	autocmd GUIEnter    * call automatic#run({"autocmd" : "GUIEnter"})
 	autocmd CursorMoved * call automatic#run({"autocmd" : "CursorMoved"})
+	autocmd CursorMovedI * call automatic#run({"autocmd" : "CursorMovedI"})
 	autocmd User BufWinEnterFuture call automatic#run({"autocmd" : "BufWinEnterFuture"})
 augroup END
 
