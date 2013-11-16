@@ -146,6 +146,7 @@ set_once_in_window	(数値)		1 が設定されていればマッチしたウィ�
 					ウでは1度しか "set" が行われない
 expr			(文字列)	|eval()| で評価する
 localtime_expr		(文字列)	現在の時間でチェックする
+quickrun_latest_filetype(文字列)	最後に |:QuickRun| を行った |filetype|
 
 
 詳しくは |automatic-matcher| も参照してください。
@@ -391,10 +392,18 @@ Example: >
 	" 8時から12時の間にマッチ
 	let s:match = {
 	\	"localtime_expr" : "8 <= hour && hour <= 12",
-	}
+	\}
+
+- "quickrun_latest_filetype"	*automatic-matcher-quickrun_latest_filetype*
+  最後に |:QuickRun| を行った |filetype| でチェックを行います。
+
+Example: >
+	" filetype=vim で :QuickRun し、出力バッファが開かれた場合
+	let s:match =  {
+	\	"filetype" : "quickrun",
+	\	"quickrun_latest_filetype" : "ruby",
+	\}
 <
-
-
 
 =============================================================================
 セット方法					*automatic-setter*
