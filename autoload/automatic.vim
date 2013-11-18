@@ -2,6 +2,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+
 let s:autocmd_histories = []
 function! automatic#clear_autocmd_history()
 	let s:autocmd_histories = []
@@ -47,12 +48,13 @@ call automatic#load_matcher()
 
 function! s:matcher_autocmd(config, context)
 	if empty(get(a:context, "autocmd", ""))
+\	&& empty(get(a:context, "autocmd_history", []))
 		return 1
 	endif
 	let autocmds = get(a:config, "autocmds", ["BufWinEnter"])
 	let pattern  = get(a:config, "autocmd_history_pattern", "NotFound")
-	return index(autocmds, a:context.autocmd) != -1
-\		|| join(get(a:context, "autocmd_history"), "") =~ pattern
+	return index(autocmds, get(a:context, "autocmd", "")) != -1
+\		|| join(get(a:context, "autocmd_history", []), "") =~ pattern
 endfunction
 call automatic#regist_matcher("autocmd", function("s:matcher_autocmd"))
 
@@ -70,11 +72,11 @@ call automatic#regist_matcher("bufname", function("s:matcher_bufname"))
 
 
 function! s:matcher_filename(config, context)
-	let filename = a:context.filename
-	if !filereadable(a:context.filename)
+	let filename = get(a:context, "filename", "")
+	if !filereadable(filename)
 		return 1
 	endif
-	return get(a:context, "filename", "") =~# get(a:config, "filename", "")
+	return filename =~# get(a:config, "filename", "")
 endfunction
 call automatic#regist_matcher("filename", function("s:matcher_filename"))
 
@@ -169,13 +171,41 @@ function! automatic#set_current(config, context, unsettings)
 endfunction
 
 
+let s:default_match_presets = {
+\	"unite_opened" : {
+\		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
+\		"filetype" : "unite",
+\	}
+\}
+
+function! automatic#get_match_preset(name)
+	return get(extend(deepcopy(s:default_match_presets), g:automatic_match_presets), a:name, {})
+endfunction
+
+
+function! s:as_match_config(config)
+	return type(a:config) == type({}) ? a:config
+\		 : type(a:config) == type("") ? automatic#get_match_preset(a:config)
+\		 : {}
+endfunction
+
+
+function! s:is_match(config, def_match, context)
+	let def_match = deepcopy(a:def_match)
+	let match     = s:as_match_config(get(a:config, 'match', {}))
+	let preset    = deepcopy(s:as_match_config(get(match, 'preset', {})))
+	return automatic#is_match(extend(def_match, extend(preset, match)), a:context)
+endfunction
 
 
 function! automatic#run(...)
 	let context = automatic#make_current_context(get(a:, 1, {}))
-	let def_match = g:automatic_default_match_config
 
-	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(extend(deepcopy(def_match), get(v:val, 'match', {})), context)")
+	let def_conf = g:automatic_default_match_config
+
+	let setlist = filter(deepcopy(g:automatic_config), "s:is_match(v:val, def_conf, context)")
+" 	let setlist = filter(deepcopy(g:automatic_config), "automatic#is_match(extend(deepcopy(def_conf), s:as_match_config(get(v:val, 'match', {}))), context)")
+
 	let unsettings = []
 	for config in setlist
 		if get(get(config, "set", {}), "unsetting", 0)

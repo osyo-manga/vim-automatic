@@ -57,6 +57,33 @@ g:automatic_default_set_config			*g:automatic_default_set_config*
 	|g:automatic_default_set_config| よりも |g:automatic_config| の値が
 	優先して使用されます。
 
+g:automatic_match_presets			*g:automatic_match_presets*
+	|automatic#get_match_preset()| の設定をユーザ側で拡張するための変数で
+	す。
+	これは次のように拡張する事ができます。
+Example: >
+	" GUI で起動した場合のマッチ方法
+	let s:default_match_presets = {
+	\	"gvim_started" : {
+	\		"autocmds" : ["GUIEnter"],
+	\		"is_open_other_window" : 1
+	\	}
+	\}
+
+	" GUI で起動した場合にウィンドウ位置やサイズを設定する
+	let g:automatic_config = [
+	\	{
+	\		"match" : "gvim_started",
+	\		"set" : {
+	\			"lines" : 50,
+	\			"columes" : 150,
+	\			"winpos_x" : 100,
+	\			"winpos_y" : 50,
+	\		},
+	\	},
+	\]
+<
+
 
 ==============================================================================
 インターフェース				*automatic-interface*
@@ -80,6 +107,31 @@ automatic#close_window_for_tag_from_current_tabpage({tag})
 	それ以外は |automatic#close_window_for_tag()| と同じです。
 
 
+automatic#get_match_preset({name})		*automatic#get_match_preset()*
+	|automatic.vim| が予め用意してある |automatic-config-match| を返しま
+	す。
+	これは次のように使用する事ができます。
+Example: >
+	" unite.vim が開かれた場合にマッチするコンフィグを返す
+	let s:unite_match = automatic#get_match_preset("untie_opened")
+	let g:automatic_config = [
+	\	{
+	\		'match' : s:unite_match
+	\		'set' : {
+	\			"height" : "40%",
+	\		},
+	\	},
+	\]
+<
+	{name} には以下のものが設定できます。
+	名前			マッチする条件~
+	--------------		-------------------~
+	unite_opened		|unite.vim| が開かれた時
+
+	また、この設定は |g:automatic_match_presets| で拡張を行うことができま
+	す。
+
+
 =============================================================================
 設定方法					*automatic-config*
 
@@ -96,6 +148,7 @@ automatic#close_window_for_tag_from_current_tabpage({tag})
 （e.g. unite.vim は |BufWinEnter| よりも後でウィンドウサイズが変更されているた
 め、ウィンドウのリサイズが正しく行われない場合があります。
 この場合は正しく設定されない場合があるので注意してください。
+
 
 
 Example: >
@@ -147,9 +200,13 @@ set_once_in_window	(数値)		1 が設定されていればマッチしたウィ�
 expr			(文字列)	|eval()| で評価する
 localtime_expr		(文字列)	現在の時間でチェックする
 quickrun_latest_filetype(文字列)	最後に |:QuickRun| を行った |filetype|
+preset			(文字列 or 辞書)プリセット
 
 
 詳しくは |automatic-matcher| も参照してください。
+また、"match" には文字列も設定することができます。
+文字列が設定されている場合は、|automatic#get_match_preset()| から設定した文字
+列参照されます。
 
 
 ------------------------------------------------------------------------------
@@ -404,6 +461,34 @@ Example: >
 	\	"quickrun_latest_filetype" : "ruby",
 	\}
 <
+
+- "preset"			*automatic-matcher-preset*
+  "match" のデフォルトの値として使用します。
+  設定できる値は |automatic-config-match| に設定できる値、もしくは
+  |automatic#get_match_preset()| の {name} を渡すことができます。
+  この設定は |g:automatic_default_match_config| よりも優先順位が高く、
+  "match" に設定されている値よりも優先順位が低いです。
+  "preset" は次のような場合に使用します。
+
+Example: >
+	" unite-file の場合にのみマッチする
+	" "match_preset" で "unite" を設定し
+	" 細かい設定を "match" で行う
+	let g:automatic_config = [
+	\	{
+	\		'match' : {
+	\			"preset" : "unite_opened",
+	\			"unite_sources" : ["file"],
+	\		},
+	\		'set' : {
+	\			"height" : "40%",
+	\		},
+	\	},
+	\]
+<
+
+
+
 
 =============================================================================
 セット方法					*automatic-setter*
@@ -726,7 +811,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	let g:automatic_config = [
 	\	{
 	\		"match" : {
-	\			"bufname" : '[[*]unite[]*]',
+	\			"preset" : "unite_opened",
 	\			"unite_bufname" : 'large',
 	\		},
 	\		"set" : {
@@ -735,7 +820,7 @@ unite.vim の |unite-options-buffer-name| で設定を切り替える
 	\	},
 	\	{
 	\		"match" : {
-	\			"bufname" : '[[*]unite[]*]',
+	\			"preset" : "unite_opened",
 	\			"unite_bufname" : 'small',
 	\		},
 	\		"set" : {
@@ -815,12 +900,48 @@ A. unite.vim は |BufWinEnter| 後に unite.vim 側でウィンドウが変更�
    ただし、既存の unite.vim のバッファが使用された場合はウィンドウサイズは
    "set" で設定したものに変更されます。
    それ以外の "set" は設定されます。
+   この問題は次のようにして回避する事ができます。
+>
+	" automatic.vim で用意している preset を使用する
+	let g:automatic_config = [
+	\	{
+	\		'match' : automatic#get_match_preset("untie_opened"),
+	\		'set' : {
+	\			"height" : "40%",
+	\		},
+	\	},
+	\]
+	
+	" また、これは以下のように記述する事もできる
+	let g:automatic_config = [
+	\	{
+	\		'match' : "untie_opened",
+	\		'set' : {
+	\			"height" : "40%",
+	\		},
+	\	},
+	\]
+
+<
 
 
-Q. :help すると "set" が2回呼ばれる
+Q. :help すると "set" が2回呼ばれるのを回避する
 
 A. :help すると |BufWinEnter| が2回呼ばれます。これは "match" の "buftype" と
    "filetype" のそれぞれ両方 "help" を設定することで回避できます。
+>
+	let g:automatic_config = [
+	\	{
+	\		'match' : {
+	\			"filetype" : "help",
+	\			"buftype" : "help",
+	\		},
+	\		'set' : {
+	\			"commands" : ["echom 'mamimami'"]
+	\		},
+	\	},
+	\]
+<
 
 
 Q. "autocmds" : ["GUIEnter"] を設定しても "set" が反映されない

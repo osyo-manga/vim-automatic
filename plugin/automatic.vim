@@ -12,6 +12,7 @@ let g:automatic_config               = get(g:, "automatic_config", [])
 let g:automatic_default_match_config = get(g:, "automatic_default_match_config", {})
 let g:automatic_default_set_config   = get(g:, "automatic_default_set_config", {})
 let g:autocmd_history_size           = get(g:, "autocmd_history_size", 20)
+let g:automatic_match_presets        = get(g:, "automatic_match_presets ", {})
 
 augroup automatic
 	autocmd!
@@ -27,6 +28,7 @@ augroup automatic
 	autocmd CursorMovedI * call automatic#run({"autocmd" : "CursorMovedI"})
 	autocmd User BufWinEnterFuture call automatic#run({"autocmd" : "BufWinEnterFuture"})
 augroup END
+
 
 
 
