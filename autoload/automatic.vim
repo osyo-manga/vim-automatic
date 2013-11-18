@@ -97,9 +97,9 @@ call automatic#regist_matcher("apply", function("s:matcher_apply"))
 
 
 function! s:matcher_is_open_other_window(config, context)
-	if get(a:config, "is_open_other_window", 1)
+	if get(a:config, "is_open_other_window", 1) == 1
 		return winnr("$") > 1
- 	else
+	elseif get(a:config, "is_open_other_window", 1) == 0
 		return winnr("$") == 1
 	endif
 	return 1
@@ -175,7 +175,16 @@ let s:default_match_presets = {
 \	"unite_opened" : {
 \		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
 \		"filetype" : "unite",
-\	}
+\		"is_open_other_window" : -1,
+\	},
+\	"helped" : {
+\		"filetype" : "help",
+\		"buftype"  : "help",
+\	},
+\	"gui_enter" : {
+\			"autocmds" : ["GUIEnter"],
+\			"is_open_other_window" : 0
+\	},
 \}
 
 function! automatic#get_match_preset(name)
