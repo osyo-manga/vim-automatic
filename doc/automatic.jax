@@ -123,10 +123,14 @@ Example: >
 	\	},
 	\]
 <
+						*automatic-preset*
 	{name} には以下のものが設定できます。
 	名前			マッチする条件~
 	--------------		-------------------~
 	unite_opened		|unite.vim| が開かれた時
+	unite_split		|unite.vim| が |split| で開かれた時
+	unite_no_split		|unite.vim| が |unite-options-no-split| で
+				開かれた時
 	helped			|:help| を行った後
 	gui_enter		|GUIEnter|
 

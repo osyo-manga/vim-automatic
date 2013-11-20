@@ -177,6 +177,16 @@ let s:default_match_presets = {
 \		"filetype" : "unite",
 \		"is_open_other_window" : -1,
 \	},
+\	"unite_split" : {
+\		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
+\		"filetype" : "unite",
+\		"is_open_other_window" : 1,
+\	},
+\	"unite_no_split" : {
+\		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
+\		"filetype" : "unite",
+\		"is_open_other_window" : 0,
+\	},
 \	"helped" : {
 \		"filetype" : "help",
 \		"buftype"  : "help",
