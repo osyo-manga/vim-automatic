@@ -40,7 +40,7 @@ function! automatic#setters#resize#apply(config, ...)
 	endif
 
 	if has_key(a:config, "width")
-		call s:width(a:config.height, get(a:config, "min_width", 1), get(a:config, "max_width", &columns))
+		call s:width(a:config.width, get(a:config, "min_width", 1), get(a:config, "max_width", &columns))
 	endif
 endfunction
 
