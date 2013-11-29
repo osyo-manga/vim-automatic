@@ -207,6 +207,16 @@ let s:default_match_presets = {
 \		"filetype" : "unite",
 \		"is_open_other_window" : 0,
 \	},
+\	"vimfiler_opened" : {
+\		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
+\		"filetype" : "vimfiler",
+\		"is_open_other_window" : -1,
+\	},
+\	"vimfiler_explorer_opened" : {
+\		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
+\		"filetype" : "vimfiler",
+\		"expr" : "get(get(get(b:, 'vimfiler', {}), 'context', {}), 'explorer', 0)"
+\	},
 \	"helped" : {
 \		"filetype" : "help",
 \		"buftype"  : "help",

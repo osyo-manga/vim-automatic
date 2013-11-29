@@ -131,6 +131,8 @@ Example: >
 	unite_opened_split	|unite.vim| が |split| で開かれた時
 	unite_opened_no_split	|unite.vim| が |unite-options-no-split| で
 				開かれた時
+	vimfiler_opened		|vimfiler.vim| が開かれた時
+	vimfiler_explorer_opened|:VimFilerExplorer| が開かれた時
 	helped			|:help| を行った後
 	gui_enter		|GUIEnter|
 
