@@ -14,18 +14,28 @@ let g:automatic_default_set_config   = get(g:, "automatic_default_set_config", {
 let g:autocmd_history_size           = get(g:, "autocmd_history_size", 20)
 let g:automatic_match_presets        = get(g:, "automatic_match_presets ", {})
 
+let s:autocmds = [
+\	"BufWinEnter",
+\	"BufWinLeave",
+\	"WinEnter",
+\	"WinLeave",
+\	"FileType",
+\	"CmdwinEnter",
+\	"CmdwinLeave",
+\	"VimEnter",
+\	"GUIEnter",
+\	"CursorMoved",
+\	"CursorMovedI",
+\	"QuitPre",
+\]
+
 augroup automatic
 	autocmd!
-	autocmd BufWinEnter * call automatic#run({"autocmd" : "BufWinEnter"})
-	autocmd WinEnter    * call automatic#run({"autocmd" : "WinEnter"})
-	autocmd WinLeave    * call automatic#run({"autocmd" : "WinLeave"})
-	autocmd FileType    * call automatic#run({"autocmd" : "FileType"})
-	autocmd CmdwinEnter * call automatic#run({"autocmd" : "CmdwinEnter"})
-	autocmd CmdwinLeave * call automatic#run({"autocmd" : "CmdwinLeave"})
-	autocmd VimEnter    * call automatic#run({"autocmd" : "VimEnter"})
-	autocmd GUIEnter    * call automatic#run({"autocmd" : "GUIEnter"})
-	autocmd CursorMoved * call automatic#run({"autocmd" : "CursorMoved"})
-	autocmd CursorMovedI * call automatic#run({"autocmd" : "CursorMovedI"})
+	for s:autocmd in s:autocmds
+		if exists("##" . s:autocmd)
+		execute "autocmd" s:autocmd '* call automatic#run({"autocmd" : ' . string(s:autocmd) . '})'
+	endif
+	endfor
 	autocmd User BufWinEnterFuture call automatic#run({"autocmd" : "BufWinEnterFuture"})
 augroup END
 

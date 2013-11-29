@@ -207,6 +207,7 @@ expr			(文字列)	|eval()| で評価する
 localtime_expr		(文字列)	現在の時間でチェックする
 quickrun_latest_filetype(文字列)	最後に |:QuickRun| を行った |filetype|
 preset			(文字列 or 辞書)プリセット
+tag			(文字列 or 辞書)タグ
 
 
 詳しくは |automatic-matcher| も参照してください。
@@ -434,6 +435,13 @@ Example: >
 
   名前			型		デフォルト値~
   expr			(文字列)	なし
+
+
+- "tag"				*automatic-matcher-tag*
+  |automatic-setter-tags| で設定したタグとの比較を行います。
+
+  名前			型		デフォルト値~
+  tag			(文字列)	なし
 
 
 - "localtime"				*automatic-matcher-local*

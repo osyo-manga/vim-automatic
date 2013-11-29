@@ -51,8 +51,8 @@ function! s:matcher_autocmd(config, context)
 \	&& empty(get(a:context, "autocmd_history", []))
 		return 1
 	endif
-	let autocmds = get(a:config, "autocmds", ["BufWinEnter"])
 	let pattern  = get(a:config, "autocmd_history_pattern", "NotFound")
+	let autocmds = get(a:config, "autocmds", pattern ==# "NotFound" ? ["BufWinEnter"] : [])
 	return index(autocmds, get(a:context, "autocmd", "")) != -1
 \		|| join(get(a:context, "autocmd_history", []), "") =~ pattern
 endfunction
@@ -85,6 +85,16 @@ function! s:matcher_buftype(config, context)
 	return get(a:context, "buftype", "") =~# get(a:config, "buftype", "")
 endfunction
 call automatic#regist_matcher("buftype", function("s:matcher_buftype"))
+
+
+function! s:matcher_tags(config, context)
+	let tag = get(a:config, "tag", "")
+	if empty(tag)
+		return 1
+	endif
+	return index(get(w:, "automatic_setter_tags", []), a:config.tag) != -1
+endfunction
+call automatic#regist_matcher("tag", function("s:matcher_tags"))
 
 
 function! s:matcher_apply(config, context)
@@ -176,19 +186,16 @@ let s:default_match_presets = {
 \		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
 \		"filetype" : "unite",
 \		"is_open_other_window" : -1,
-\		"autocmds" : [""],
 \	},
 \	"unite_split" : {
 \		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
 \		"filetype" : "unite",
 \		"is_open_other_window" : 1,
-\		"autocmds" : [""],
 \	},
 \	"unite_no_split" : {
 \		"autocmd_history_pattern" : 'BufWinEnterFileType\(CursorMoved\|CursorMovedI\)$',
 \		"filetype" : "unite",
 \		"is_open_other_window" : 0,
-\		"autocmds" : [""],
 \	},
 \	"helped" : {
 \		"filetype" : "help",
