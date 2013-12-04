@@ -19,6 +19,10 @@ endfunction
 
 
 function! s:height(value, min, max)
+	if type(a:value) == type("") && empty(a:value)
+\	|| type(a:value) == type(0)  && a:value < 1
+		return
+	endif
 	if type(a:value) == type("") && s:is_percent(a:value)
 		return s:height(float2nr(s:percent_to_float(a:value) * &lines), a:min, a:max)
 	endif
@@ -27,6 +31,10 @@ endfunction
 
 
 function! s:width(value, min, max)
+	if type(a:value) == type("") && empty(a:value)
+\	|| type(a:value) == type(0)  && a:value < 1
+		return
+	endif
 	if type(a:value) == type("") && s:is_percent(a:value)
 		return s:width(float2nr(s:percent_to_float(a:value) * &columns), a:min, a:max)
 	endif
