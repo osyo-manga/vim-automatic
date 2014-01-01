@@ -14,7 +14,7 @@ endfunction
 function! automatic#matchers#set_once_in_window#apply(config, context)
 	let w:automatic_matchers_set_once_in_window = 0
 endfunction
-call automatic#regist_setter("set_once_in_window", function("automatic#matchers#set_once_in_window#apply"))
+call automatic#register_setter("set_once_in_window", function("automatic#matchers#set_once_in_window#apply"))
 
 
 let &cpo = s:save_cpo

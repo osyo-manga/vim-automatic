@@ -32,14 +32,14 @@ endfunction
 
 
 let s:matcher = {}
-function! automatic#regist_matcher(name, func)
+function! automatic#register_matcher(name, func)
 	let s:matcher[a:name] = a:func
 endfunction
 
 
 function! automatic#load_matcher()
 	for name in map(split(globpath(&rtp, "autoload/automatic/matchers/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
-		call automatic#regist_matcher(name, function("automatic#matchers#" . name . "#is_match"))
+		call automatic#register_matcher(name, function("automatic#matchers#" . name . "#is_match"))
 	endfor
 endfunction
 call automatic#load_matcher()
@@ -56,19 +56,19 @@ function! s:matcher_autocmd(config, context)
 	return index(autocmds, get(a:context, "autocmd", "")) != -1
 \		|| join(get(a:context, "autocmd_history", []), "") =~ pattern
 endfunction
-call automatic#regist_matcher("autocmd", function("s:matcher_autocmd"))
+call automatic#register_matcher("autocmd", function("s:matcher_autocmd"))
 
 
 function! s:matcher_filetype(config, context)
 	return get(a:context, "filetype", "") =~# get(a:config, "filetype", "")
 endfunction
-call automatic#regist_matcher("filetype", function("s:matcher_filetype"))
+call automatic#register_matcher("filetype", function("s:matcher_filetype"))
 
 
 function! s:matcher_bufname(config, context)
 	return get(a:context, "bufname", "") =~# get(a:config, "bufname", "")
 endfunction
-call automatic#regist_matcher("bufname", function("s:matcher_bufname"))
+call automatic#register_matcher("bufname", function("s:matcher_bufname"))
 
 
 function! s:matcher_filename(config, context)
@@ -78,13 +78,13 @@ function! s:matcher_filename(config, context)
 	endif
 	return filename =~# get(a:config, "filename", "")
 endfunction
-call automatic#regist_matcher("filename", function("s:matcher_filename"))
+call automatic#register_matcher("filename", function("s:matcher_filename"))
 
 
 function! s:matcher_buftype(config, context)
 	return get(a:context, "buftype", "") =~# get(a:config, "buftype", "")
 endfunction
-call automatic#regist_matcher("buftype", function("s:matcher_buftype"))
+call automatic#register_matcher("buftype", function("s:matcher_buftype"))
 
 
 function! s:matcher_tags(config, context)
@@ -94,7 +94,7 @@ function! s:matcher_tags(config, context)
 	endif
 	return index(get(w:, "automatic_setter_tags", []), a:config.tag) != -1
 endfunction
-call automatic#regist_matcher("tag", function("s:matcher_tags"))
+call automatic#register_matcher("tag", function("s:matcher_tags"))
 
 
 function! s:matcher_apply(config, context)
@@ -103,7 +103,7 @@ function! s:matcher_apply(config, context)
 	endif
 	return 1
 endfunction
-call automatic#regist_matcher("apply", function("s:matcher_apply"))
+call automatic#register_matcher("apply", function("s:matcher_apply"))
 
 
 function! s:matcher_is_open_other_window(config, context)
@@ -114,7 +114,7 @@ function! s:matcher_is_open_other_window(config, context)
 	endif
 	return 1
 endfunction
-call automatic#regist_matcher("is_open_other_window", function("s:matcher_is_open_other_window"))
+call automatic#register_matcher("is_open_other_window", function("s:matcher_is_open_other_window"))
 
 
 function! s:is_match_all(config, context)
@@ -136,14 +136,14 @@ endfunction
 
 
 let s:setter = {}
-function! automatic#regist_setter(name, func)
+function! automatic#register_setter(name, func)
 	let s:setter[a:name] = a:func
 endfunction
 
 
 function! automatic#load_setter()
 	for name in map(split(globpath(&rtp, "autoload/automatic/setters/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
-		call automatic#regist_setter(name, function("automatic#setters#" . name . "#apply"))
+		call automatic#register_setter(name, function("automatic#setters#" . name . "#apply"))
 	endfor
 endfunction
 call automatic#load_setter()
@@ -156,7 +156,7 @@ function! s:setter_apply(config, context)
 	endif
 	return 1
 endfunction
-call automatic#regist_setter("apply", function("s:setter_apply"))
+call automatic#register_setter("apply", function("s:setter_apply"))
 
 
 function! s:setter_command(config, context)
@@ -165,7 +165,7 @@ function! s:setter_command(config, context)
 		execute command
 	endfor
 endfunction
-call automatic#regist_setter("command", function("s:setter_command"))
+call automatic#register_setter("command", function("s:setter_command"))
 
 
 
