@@ -236,6 +236,7 @@ min_width		(数値)		ウィンドウの最小の幅（桁数）
 move			(文字列)	ウィンドウの位置
 setlist			(リスト)	使用する |automatic-setter| のリスト
 is_close_focus_out	(数値)		別のウィンドウへ移動した場合にウィンド
+					を閉じるかどうかを設定
 close_window_cmd	(文字列)	ウィンドウと閉じる際に使用するコマンド
 unsetting		(数値)		マッチしたいずれかの "set" でこの
 					値に1 が設定してある場合、すべての
