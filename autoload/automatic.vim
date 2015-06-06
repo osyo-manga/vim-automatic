@@ -3,6 +3,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+let s:V = vital#of("automatic")
+let s:Gift = s:V.import("Gift")
+function! automatic#gift()
+	return s:Gift
+endfunction
+
+
 let s:autocmd_histories = []
 function! automatic#clear_autocmd_history()
 	let s:autocmd_histories = []
@@ -121,6 +128,12 @@ function! s:is_match_all(config, context)
 	let matchlist = get(a:config, "matchlist", keys(s:matcher))
 	for name in matchlist
 		if !s:matcher[name](a:config, a:context)
+			if get(a:config, "unite_bufname", "111") ==# "messages"
+" 				echom "---------------"
+" 				PP! name
+" 				PP! a:config
+" 				PP! a:context
+			endif
 			return 0
 		endif
 	endfor
@@ -270,12 +283,12 @@ endfunction
 
 
 function! automatic#close_window_for_tag(tag)
-	return gift#close_window_by("index(gettabwinvar(tabnr, winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
+	return s:Gift.close_window_by("index(gettabwinvar(tabnr, winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
 endfunction
 
 
 function! automatic#close_window_for_tag_from_current_tabpage(tag)
-	return gift#close_window_by("tabpagenr() == tabnr && index(getwinvar(winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
+	return s:Gift.close_window_by("tabpagenr() == tabnr && index(getwinvar(winnr, 'automatic_setter_tags', []), ".string(a:tag).") != -1", "execute get(w:, 'automatic_setter_close_window_cmd', 'close')")
 endfunction
 
 
