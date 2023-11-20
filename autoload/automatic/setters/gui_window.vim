@@ -41,7 +41,9 @@ function! automatic#setters#gui_window#apply(config, ...)
 
 	let x = get(a:config, "winpos_x", getwinposx())
 	let y = get(a:config, "winpos_y", getwinposy())
-	execute "winpos" x y
+	if x != -1 && y != -1
+		execute "winpos" x y
+	endif
 endfunction
 
 
